@@ -3,6 +3,7 @@ layout: post
 title: Amazon's DynamoDB Design Condensed 
 ---
 
+This article is on Amazon's Dynamo database, a highly distributed key-value storage system, designed to be always available.
 Here is the paper if you want to read it all in full!
 -> [Amazon's DynamoDB](https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf) <-
 

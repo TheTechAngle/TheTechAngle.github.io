@@ -10,15 +10,13 @@ Here is the paper if you want to read it all in full!
 If not, here's my summary of the design. (While reading the Amazon paper on DynamoDB, I found out that S3 is a short form for simple storage service. Fun Fact)
 
 ### COMPLETELY DECENTRALIZED and SYMMETRICAL
-Amazon wants its site to be available to customers no matter what. As we know from the CAP theorem, for highly scalable systems, as the network keeps growing you risk partitions that divide the system at which point you have to choose between consistency and availability. 
-Amazon sacrifices consistency for scalability and availability. Data is partitioned and replicated using consistent hashing, and consistency is maintained using object versioning, with a quorum like technique and a decentralized replica synchronization protocol. Dynamo has a gossip protocol for failure prevention (which one day lead to a system outage, an interesting case we’ll discuss later) 
 
-"Clients and services engage in a Service Level Agreement (SLA), a formally negotiated contract where a client and a service agree on several system-related characteristics, which most prominently include the client’s expected request rate distribution for a particular API and the expected service latency under those conditions. An example of a simple SLA is a service guaranteeing that it will provide a response within 300ms for 99.9% of its requests for a peak client load of 500 requests per second." 
+A completely decentralized system, DynamoDB does not have a bottleneck or a single point of failure that is the master node.
+Amazon wants its site to be available to customers no matter what. As we know from the CAP theorem for highly scalable systems, as the network keeps growing you risk partitions that divide the system. At this point you have to choose between consistency and availability. 
+Amazon prioritizes scalability and availability over consistency. Data is partitioned and replicated using consistent hashing, and consistency is maintained using object versioning, with a quorum like technique and a decentralized replica synchronization protocol. Dynamo has a gossip protocol for failure prevention (This protocol led to a system outage for AmazonS3, [an interesting case](https://status.aws.amazon.com/s3-20080720.html) you should read). "Dynamo can be characterized as a zero-hop DHT, where each node maintains enough routing information locally to route a request to the appropriate node directly, to increase latency."
 
 ### Dynamo’s consistency
-Writes are NEVER rejected. Interesting. So who resolves the conflicts? The datastore could use a last write wins method, which though the default is not very smart. Instead the application layer is allowed to manipulate it, for example, maybe merge the two writes. 
-
-"Dynamo can be characterized as a zero-hop DHT, where each node maintains enough routing information locally to route a request to the appropriate node directly, to increase latency."
+Writes are NEVER rejected. That's Interesting. So who resolves the conflicts? The datastore could use a last write wins method which, though the default, is not very smart. Instead the application layer is allowed to manipulate it, for example, maybe merge the two writes. 
 
 ### Dynamo System Interface
 Dynamo has the two quintessential operations we’ve come to know and love - get() and put() Put takes in another parameter apart from the key and object - the context which store metadata related to the caller including the version set of the object.
@@ -37,12 +35,14 @@ When the object diverges, both versions have to be presented to the client, and 
 I like that they leave it up to the client, so much more easier
 
 ### Execution of get() and put()
-One coordinator who manages replicas. Dynamo uses the quorum protocol(LINK) with R - minimum number of nodes required to participate for read, W being minimum for write, where W+R > N, so a read and write don’t take place simultaneously. For get, the coordinator  returns all the causally unrelated items.
+One coordinator who manages replicas. Dynamo uses the quorum protocol(LINK) with R - minimum number of nodes required to participate for read, W being minimum for write, where W+R > N, so a read and write don’t take place simultaneously. For get, the coordinator returns all the causally unrelated items.
 For a put request, the coordinator generates the vector clock for the new version, writes it locally and attempts to send it to W-1 other nodes. If the all reply with a success code, then the operation is deemed to be successful.
 
 ### Handling failures : hinted handoffs
 To make sure the the system is always available, the sloppy quorum system is used, where N healthy nodes are considered during the vote, while the actual number of nodes will be greater than N.
-Usually, the R+W>N approach makes sure that the data is always eventually consistent, but in case of a sloppy quorum that may not be true, as explained so well [here](https://jimdowney.net/2012/03/05/be-careful-with-sloppy-quorums/). 
+
+Usually, the R+W>N approach makes sure that the data is always eventually consistent, but in case of a sloppy quorum that may not be true, as explained so well [here](https://jimdowney.net/2012/03/05/be-careful-with-sloppy-quorums/). What if during a write operation, a previously dead system comes back online again and participates in a read? The information sent back will be inconsistent.
+
 If a server A is down temporarily, its load is transferred to another service B, which keeps it and updates it in a separate database. This system B may then participate in operations in A's stead. Then when the server A is up again, it attempts to send it back. This hinted hand-off make sure that as soon as the unhealthy system is back up, it is updated and doesn't participate in a read operation with stale operation.
 
 

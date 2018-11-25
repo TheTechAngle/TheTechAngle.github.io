@@ -25,7 +25,9 @@ Dynamo fixes this by assign a node to multiple positions in the node. Cassandra 
 ### Replication
 
 Each data item is replicated on N hosts. Each key has a coordinator host, , and it replicates these keys at the N-1 nodes in the ring. Cassandra has various replication policies - 
+
 1) Rack unaware - the N-1 replicas are the N-1 successors of the coordinator
+
 2) Rack aware - A leader is elected amongst the nodes using Zookeeper. The leader then tells the nodes which ranges they are replicas for. Zookeeper stores this in the form of persistent metadata in case of the node crashing.
 
 ### Membership and Failure Detection

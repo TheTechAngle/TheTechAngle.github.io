@@ -3,28 +3,30 @@ layout: post
 title: Cassandra's Design Condensed 
 ---
 
-[Cassandra](https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf) is a popular decentralized distributed key value store, designed for write heavy workloads. Cassandra was designed at Facebook to meet its needs for reliability and scalalbility in the Inbox Search problem. 
+[Cassandra](https://www.cs.cornell.edu/projects/ladis2009/papers/lakshman-ladis2009.pdf) is a popular decentralized distributed key value store, designed for write heavy workloads. Cassandra was designed at Facebook to meet its needs for reliability and scalalbility in the Inbox Search problem. Cassandra's design seems to be heavily inspired by Amazon's Dynamo.
 
-It was super intersting researching this as I had previosly used the Cassandra Database for aproject of mine back in undergrad.
+It was super interesting researching this as I had previously used the Cassandra Database for a project of mine back in undergrad.
 
 ### Data Model
 A table in Cassandra is a multidimensional map indexed by a key. Every operation under a single row key is atomic per replica. Cassandra groups its columns into sets called column families. A Super Column family consists of columns within columns. 
 
 The API to access the database consists of three simple methods - insert, get, and delete. All of these take the table name, and the key. Insert takes the row mutation as the last parameter, while get and delete takes the columnName as the last parameter. 
 
-Typically a read or write request for a key gets routed to any node in the cluster, the node then determines the replicas for the key and then waits for the responses from all the replicas.
+Typically a read or write request for a key gets routed to any node in the cluster, the node then determines the replicas for the key and then waits for the responses from all the replicas. 
 
 ### Partitioning 
 
 Cassandra partitions data across clusters using consistent hashing. As we have seen before in the case of DynamoDB, the basic algorithm for this has two problems - 
-1) A node being randomly assigned in the ring leads to uneven data distribution and load balancing
-2) It doesn't address the heterogeneity of the performances of the nodes
 
-Dynamo fixes this by assign a node to multiple positions in the node. Cassandra analyses load information in the ring and moves lightly loaded nodes move to alleviate the burden on the hevily loaded nodes.
+1) A node being randomly assigned in the ring leads to uneven data distribution and load balancing
+
+2) It doesn't address the heterogeneity of the nodes' performances
+
+Dynamo fixes this by assigning a node to multiple positions in the ring. Cassandra analyses load information in the ring and moves lightly loaded nodes to lighten the burden on the heavily loaded ones.
 
 ### Replication
 
-Each data item is replicated on N hosts. Each key has a coordinator host, , and it replicates these keys at the N-1 nodes in the ring. Cassandra has various replication policies - 
+Each data item is replicated on N hosts. Each key has a coordinator host, and it replicates these keys at the N-1 nodes in the ring. Cassandra has various replication policies - 
 
 1) Rack unaware - the N-1 replicas are the N-1 successors of the coordinator
 

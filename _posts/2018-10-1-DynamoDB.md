@@ -62,3 +62,4 @@ But there might be cases where node A joins the system and node B joins the syst
 "Communication handled by java NIO channels."
 "If stale replies are received, it updates those with the latest versions." 	 	 		
 "For the sake of brevity the failure handling and retry states are left out."
+Communication with Dynamo is through JSON/HTTP protocol, which takes away from its performance

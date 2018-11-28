@@ -1,0 +1,16 @@
+---
+layout: post
+title: Google's Bigtable Design Condensed 
+---
+
+The first thing that jumps out at you when you read the paper is bigtable's flexibility in terms of the data size and latency requirements it supports.
+It handles data from web indexing, Google Finance and Google Earth, from urls to images. (And that Orkut was a Google product, who knew)
+
+Datamodel
+---
+"A Bigtable is a sparse, distributed, persistent multidimensional sorted map". It is indexed by a row key, a column key and a timestamp, and the value stored in stored as an 
+array of bytes. As you can tell, this will model accounts for much of its storage flexibility in terms of data types and sizes.
+
+each update to a row is atomic, regardless of the number of columns. Rows are stored lexicographically, and can be partitioned accordingly,
+based on how the client wants to distribute data. Each unit of data so partitioned is called a tablet. So far, so good, we've read similar models 
+in dynamo and cassandra.

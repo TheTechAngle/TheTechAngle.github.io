@@ -22,6 +22,9 @@ The durability of a system guarantees that data that is committed persists, or i
 #### Eventual Consistency
 A system display eventual consistency when nodes evetually update each other with changes, before which it is possible that clients may see inconsistencies in the data. For example, client C may update system A by changing the value of x from 6 to 7. Since A doesn't immediately update the other nodes about this change, if C asks for the value of x again and the request is routed to system B, it will respond with the old value of x ie 6. If C repeats this request after some time during which the update takes place, it will get the new value of x.
 
+#### Indexing
+Organizing data for fast retrieval
+
 #### Lazy space allocation
 
 #### Serializability 

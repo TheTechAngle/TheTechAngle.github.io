@@ -27,5 +27,10 @@ A system display eventual consistency when nodes evetually update each other wit
 #### Serializability 
 A transaction schedule is serializable if there exists a schedule where the transactions are executed in some sequence with the same outcome.
 
+#### Split Brain Situation
+During a partition, one section may elect another master even though the old master is actually still alive
+in the other partition. To prevent this,the number of masters must never be less than or equal to half the 
+total number of nodes.
+
 #### Strong Consistency
 A system displays strong consistency when it behaves as if it is running on one node, i.e. when all the node immediately update each other for any change such that the client never sees any inconsistencies in the data.

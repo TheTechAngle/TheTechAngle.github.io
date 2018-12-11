@@ -32,5 +32,19 @@ Let's go one by one.
 * Kibana lets you visualize your Elasticsearch data and provides real time analysis. This is a tool I'll exapnd upon a bit more later.
 
 
+##### Setting it up
+
+I will skip the actual steps, AWS has them documented well enough. I'll just write about the things I found interesting as I went through the documentation.
+
+* Split brain issue - Clusters have a dedicated number of master nodes. In case of a partition, one part of the network may elect another master node even though the other one is alive and healthy but unreachable. This is know as a split brain issue.
+It is thus recommended N/2+1 nodes be needed to elect a master in a cluster. AWS suggests an odd number of instances in a cluster to avoid a split brain issue.
+
+* You can opt for the even distribution of shards across two zones in the same region.
+
+* ElasticSearch stores data as JSON documents. These are organized as types based on categories you choose, and assigned a unique ID. Indices default to 5 primary shards and one replica.
+
+
+
+
 
 

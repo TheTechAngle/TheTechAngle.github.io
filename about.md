@@ -4,11 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
-
-### More Information
-
-A place to include any other types of information that you'd like to include about yourself.
+I am a software developer at Amazon, I code by day and .. code by night! This blog was written based on/summarizing articles I'd read in my free time, all opinions expressed are mine. 
 
 ### Contact me
 

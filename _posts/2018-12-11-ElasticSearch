@@ -26,7 +26,8 @@ Amazon ES allows you to deploy, manage and scale elasticsearch clusters in the A
 Waaiit what does all of that MEAN?
 Let's go one by one. 
 
-* IAM is a service that lets you manage user and group permissions and authorizations to other AWS resources  
+* IAM is a service that lets you manage user and group permissions and authorizations to other AWS resources. An IAM policy lets you grant access to a cluster's endpoint, allowing or denying Actions (HTTP methods) against Resources (the domain endpoint, indices, and API call to
+calls to Amazon ES)  
 * Amazon VPC or the Amazon Virtual Private Cloud gives you access to a logically 'isolated' network of servers, giving the user more control over the security of their cloud  
 * This one is fairly straightforward!
 * Kibana lets you visualize your Elasticsearch data and provides real time analysis. This is a tool I'll exapnd upon a bit more later.
@@ -34,6 +35,7 @@ Let's go one by one.
 
 ##### Setting it up
 
+###### Setting up the cluster
 I will skip the actual steps, AWS has them documented well enough. I'll just write about the things I found interesting as I went through the documentation.
 
 * Split brain issue - Clusters have a dedicated number of master nodes. In case of a partition, one part of the network may elect another master node even though the other one is alive and healthy but unreachable. This is know as a split brain issue.
@@ -43,6 +45,28 @@ It is thus recommended N/2+1 nodes be needed to elect a master in a cluster. AWS
 
 * ElasticSearch stores data as JSON documents. These are organized as types based on categories you choose, and assigned a unique ID. Indices default to 5 primary shards and one replica.
 
+###### Controlling access
+I found [this blog post on aws](https://aws.amazon.com/blogs/security/how-to-control-access-to-your-amazon-elasticsearch-service-domain/)
+to learn about controlling access to the elasticsearch service. To summarize and quote from Jon -
+
+* Both the entity and the resource is covered by some sort of access policy. The union of these policies decideds on whether the entity calling the resource is allowed access to it.
+* Authentication of requests (for both policies) can occur in the following two ways
+    * Based on the originating IP Address
+    * Based on the originating Principal, or signing the request using Signature Version 4.
+    * Both the above two can be configured as shown in blog on the modify access policy tab under the domain/cluster information
+    * A dummy example would look like this - 
+    ## Use the "Effect" (Allow) for the "Principal" (user alloweduser) for "Action" (here es:* stands for any Amazon ES-related action) on the "Resource" (somedomain)
+    {
+      "Version": "20xx-10-17",
+      "Statement": [{
+        "Effect": "Allow", 
+        "Principal": {
+          "AWS": "arn:aws:iam::111111111111:user/alloweduser"
+        },      
+        "Action": "es:*", 
+        "Resource": "arn:aws:es:us-west-2:111111111111:domain/somedomain/*" 
+      }] 
+    }
 
 
 

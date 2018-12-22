@@ -3,7 +3,7 @@ layout: post
 title: Elasticsearch 
 ---
 
-### What is Elasticsearch?
+#### What is Elasticsearch?
 
 Let's go over the basics of Elasticsearch before we dive into Amazon's Elastic Search Service. 
 
@@ -13,7 +13,7 @@ that uses some defaults to index the data unless you specify one. You can access
 A cluster is a collection of servers that work together and share the data. A single server is called a node.
 A shard is a subset of documents of an index, it can be divided into many shards. 
 
-### Amazon's Elasticsearch
+#### Amazon's Elasticsearch
 
 Amazon ES allows you to deploy, manage and scale elasticsearch clusters in the AWS Cloud. It gives you access to ElasticSearch APIs and a console to set up and configure a domain, which is synonymous with an ElasticSearch cluster.
 
@@ -33,9 +33,9 @@ calls to Amazon ES)
 * Kibana lets you visualize your Elasticsearch data and provides real time analysis. This is a tool I'll exapnd upon a bit more later.
 
 
-##### Setting it up
+#### Setting it up
 
-###### Setting up the cluster
+##### Setting up the cluster
 I will skip the actual steps, AWS has them documented well enough. I'll just write about the things I found interesting as I went through the documentation.
 
 * Split brain issue - Clusters have a dedicated number of master nodes. In case of a partition, one part of the network may elect another master node even though the other one is alive and healthy but unreachable. This is know as a split brain issue.
@@ -45,7 +45,7 @@ It is thus recommended N/2+1 nodes be needed to elect a master in a cluster. AWS
 
 * ElasticSearch stores data as JSON documents. These are organized as types based on categories you choose, and assigned a unique ID. Indices default to 5 primary shards and one replica.
 
-###### Controlling access
+##### Controlling access
 I found [this blog post on aws](https://aws.amazon.com/blogs/security/how-to-control-access-to-your-amazon-elasticsearch-service-domain/)
 to learn about controlling access to the elasticsearch service. To summarize and quote from Jon -
 
@@ -53,10 +53,11 @@ to learn about controlling access to the elasticsearch service. To summarize and
 * Authentication of requests (for both policies) can occur in the following two ways
     * Based on the originating IP Address
     * Based on the originating Principal, or signing the request using Signature Version 4.
-    * Both the above two can be configured as shown in blog on the modify access policy tab under the domain/cluster information
-    * A dummy example would look like this - 
-    ## Use the "Effect" (Allow) for the "Principal" (user alloweduser) for "Action" (here es:* stands for any Amazon ES-related action) on the "Resource" (somedomain)
-    {
+    * Both the above two can be configured as demoed in blog on the modify access policy tab under the domain/cluster information
+    * A dummy example for a resource based policy would look like this  
+    
+     Use the "Effect" (Allow) for the "Principal" (user alloweduser) for "Action" (here es:* stands for any Amazon ES-related action) on the "Resource" (somedomain).
+    ```{
       "Version": "20xx-10-17",
       "Statement": [{
         "Effect": "Allow", 
@@ -67,6 +68,9 @@ to learn about controlling access to the elasticsearch service. To summarize and
         "Resource": "arn:aws:es:us-west-2:111111111111:domain/somedomain/*" 
       }] 
     }
+###### Principal based authentication 
+There are three main parts in the process of sending a Signature Version 4 request to an Amazon endpoint - generateRequest(), performSigningSteps(), and sendRequest().
+Java has an AWS SDK for this (AWS4Signer). By using the SDK, all you have to do is set up th e request, provide necessary credentials and then use the sign method in the AWS4Signer class. Ues the AWSDefaultCredentialsProvider to avoid hard coding your credentials.
 
 
 

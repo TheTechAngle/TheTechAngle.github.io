@@ -21,7 +21,7 @@ Amazon ES allows you to deploy, manage and scale elasticsearch clusters in the A
 * AWS Identity and Access Management (IAM) access control
 * Easy integration with Amazon VPC and VPC security groups
 * Encryption of data at rest and node-to-node encryption
-* Data visualization using Kibana (Something we will expand upon later) 
+* Data visualization using Kibana, which is a JavaScript based UI which lets you extract and analyze data (Something we will expand upon later) 
 
 Waaiit what does all of that MEAN?
 Let's go one by one. 
@@ -57,7 +57,8 @@ to learn about controlling access to the elasticsearch service. To summarize and
     * A dummy example for a resource based policy would look like this  
     
      Use the "Effect" (Allow) for the "Principal" (user alloweduser) for "Action" (here es:* stands for any Amazon ES-related action) on the "Resource" (somedomain).
-    ```{
+    ```
+    {
       "Version": "20xx-10-17",
       "Statement": [{
         "Effect": "Allow", 
@@ -72,6 +73,15 @@ to learn about controlling access to the elasticsearch service. To summarize and
 There are three main parts in the process of sending a Signature Version 4 request to an Amazon endpoint - generateRequest(), performSigningSteps(), and sendRequest().
 Java has an AWS SDK for this (AWS4Signer). By using the SDK, all you have to do is set up th e request, provide necessary credentials and then use the sign method in the AWS4Signer class. Ues the AWSDefaultCredentialsProvider to avoid hard coding your credentials.
 
+###### Keeping Kibana in mind
+Kibana doesn't supprt ES access via signed requests. 
+When using a IP based access policy, if Kibana has a large number of users, whitelisting all these IPs will be a pain. 
+We will need to set up a proxy between Amazon ES and Kibana, which will recieve requests from Kibana and then forward it to Amazon ES. This was, only the proxy IP will need to be whitelisted.
+If the application code can issue Signature Version 4 signed request, then no proxy is required for Principal based access policies.
+
+Recently though, Amazon has released the [Amazon Cognito Authentication](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html) for Kibana, which should be easier to use and control access with.
+
+##### Java HTTP Client
 
 
 

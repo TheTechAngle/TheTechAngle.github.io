@@ -74,7 +74,7 @@ There are three main parts in the process of sending a Signature Version 4 reque
 Java has an AWS SDK for this (AWS4Signer). By using the SDK, all you have to do is set up th e request, provide necessary credentials and then use the sign method in the AWS4Signer class. Ues the AWSDefaultCredentialsProvider to avoid hard coding your credentials.
 
 ###### Keeping Kibana in mind
-Kibana doesn't supprt ES access via signed requests. 
+Kibana doesn't support ES access via signed requests. 
 When using a IP based access policy, if Kibana has a large number of users, whitelisting all these IPs will be a pain. 
 We will need to set up a proxy between Amazon ES and Kibana, which will recieve requests from Kibana and then forward it to Amazon ES. This was, only the proxy IP will need to be whitelisted.
 If the application code can issue Signature Version 4 signed request, then no proxy is required for Principal based access policies.
@@ -82,6 +82,12 @@ If the application code can issue Signature Version 4 signed request, then no pr
 Recently though, Amazon has released the [Amazon Cognito Authentication](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html) for Kibana, which should be easier to use and control access with.
 
 ##### Java HTTP Client
+
+We used the [Jest](https://github.com/searchbox-io/Jest/tree/master/jest#comparison-to-native-api) library for setting up a Elasticsearch client in Java. There are several other clients to connect to Elasticsearch int Java.
+The native client provided by Elasticsearch doesn't use REST API and connects to the cluster as a cluster node. The node doesn't contain any data
+but remains cluster aware. This way, the client is aware of which nodes documents are saved at and can route requests accordingly.
+
+Jest is a lightweight client, with an API that is similar to the native client but is REST based.  
 
 
 

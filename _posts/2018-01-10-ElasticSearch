@@ -35,7 +35,7 @@ calls to Amazon ES)
 
 #### Setting it up
 
-##### Setting up the cluster
+##### 1) Setting up the cluster
 I will skip the actual steps, AWS has them documented well enough. I'll just write about the things I found interesting as I went through the documentation.
 
 * Split brain issue - Clusters have a dedicated number of master nodes. In case of a partition, one part of the network may elect another master node even though the other one is alive and healthy but unreachable. This is know as a split brain issue.
@@ -45,7 +45,7 @@ It is thus recommended N/2+1 nodes be needed to elect a master in a cluster. AWS
 
 * ElasticSearch stores data as JSON documents. These are organized as types based on categories you choose, and assigned a unique ID. Indices default to 5 primary shards and one replica.
 
-##### Controlling access
+##### 2) Controlling access
 I found [this blog post on aws](https://aws.amazon.com/blogs/security/how-to-control-access-to-your-amazon-elasticsearch-service-domain/)
 to learn about controlling access to the elasticsearch service. To summarize and quote from Jon -
 
@@ -69,11 +69,11 @@ to learn about controlling access to the elasticsearch service. To summarize and
         "Resource": "arn:aws:es:us-west-2:111111111111:domain/somedomain/*" 
       }] 
     }
-###### Principal based authentication 
+###### 3) Principal based authentication 
 There are three main parts in the process of sending a Signature Version 4 request to an Amazon endpoint - generateRequest(), performSigningSteps(), and sendRequest().
 Java has an AWS SDK for this (AWS4Signer). By using the SDK, all you have to do is set up th e request, provide necessary credentials and then use the sign method in the AWS4Signer class. Ues the AWSDefaultCredentialsProvider to avoid hard coding your credentials.
 
-###### Keeping Kibana in mind
+###### 4) Keeping Kibana in mind
 Kibana doesn't support ES access via signed requests. 
 When using a IP based access policy, if Kibana has a large number of users, whitelisting all these IPs will be a pain. 
 We will need to set up a proxy between Amazon ES and Kibana, which will recieve requests from Kibana and then forward it to Amazon ES. This was, only the proxy IP will need to be whitelisted.
@@ -81,12 +81,28 @@ If the application code can issue Signature Version 4 signed request, then no pr
 
 Recently though, Amazon has released the [Amazon Cognito Authentication](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html) for Kibana, which should be easier to use and control access with.
 
+##### Elasticsearch Indexes and Types
+
+An index is stored in a set of shards which are themselves Lucene indices. 
+
+###### 1) Lucene Indices
+A Lucene index is an inverted index, its an index over a dynamic collection of documents and provides rapid updates to the said collection.
+It indexs 'terms' in the document, providing a mapping from terms to documents.
+
+###### 1) Elasticsearch Indices
+An index is stored as a set of shards, which are themselves Lucene indices. Lucene indices have a small overhead in terms of disk space
+memory usage and file descriptors used, so a single large index is more efficient than several small indices
+
+
 ##### Java HTTP Client
 
-We used the [Jest](https://github.com/searchbox-io/Jest/tree/master/jest#comparison-to-native-api) library for setting up a Elasticsearch client in Java. There are several other clients to connect to Elasticsearch int Java.
+There are several clients to connect to Elasticsearch in Java.
 The native client provided by Elasticsearch doesn't use REST API and connects to the cluster as a cluster node. The node doesn't contain any data
 but remains cluster aware. This way, the client is aware of which nodes documents are saved at and can route requests accordingly.
+What does 'native' really mean though? A native client will often communicate in the internode protocol of Elasticsearch.
 
+
+We used the [Jest](https://github.com/searchbox-io/Jest/tree/master/jest#comparison-to-native-api) library for setting up a Elasticsearch client in Java.
 Jest is a lightweight client, with an API that is similar to the native client but is REST based.  
 
 

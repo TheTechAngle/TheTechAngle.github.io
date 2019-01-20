@@ -26,6 +26,7 @@ A system display eventual consistency when nodes evetually update each other wit
 Organizing data for fast retrieval
 
 #### Lazy space allocation
+Rather than allocating space for the file content as soon as it is created, the data is written onto a buffer first. This improves the chance that the data is written in a contiguous group of blocks, reducing fragmentation problems and increasing performance. 
 
 #### Serializability 
 A transaction schedule is serializable if there exists a schedule where the transactions are executed in some sequence with the same outcome.
@@ -33,7 +34,7 @@ A transaction schedule is serializable if there exists a schedule where the tran
 #### Split Brain Situation
 During a partition, one section may elect another master even though the old master is actually still alive
 in the other partition. To prevent this,the number of masters must never be less than or equal to half the 
-total number of nodes.
+total number of nodes, or the number of votes need for electing a master must be at least one more than half .
 
 #### Strong Consistency
 A system displays strong consistency when it behaves as if it is running on one node, i.e. when all the node immediately update each other for any change such that the client never sees any inconsistencies in the data.

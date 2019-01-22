@@ -96,15 +96,54 @@ memory usage and file descriptors used, so a single large index is more efficien
 
 ##### Java HTTP Client
 
-There are several clients to connect to Elasticsearch in Java.
-The native client provided by Elasticsearch doesn't use REST API and connects to the cluster as a cluster node. The node doesn't contain any data
+There are several clients to connect to Elasticsearch in Java, and a native client provided by Elasticsearch. What does 'native' really mean though? 
+A native client will often communicate in the internode protocol of Elasticsearch. The native client provided by Elasticsearch doesn't use REST API and connects to the cluster as a cluster node. The node doesn't contain any data
 but remains cluster aware. This way, the client is aware of which nodes documents are saved at and can route requests accordingly.
-What does 'native' really mean though? A native client will often communicate in the internode protocol of Elasticsearch.
+
 
 
 We used the [Jest](https://github.com/searchbox-io/Jest/tree/master/jest#comparison-to-native-api) library for setting up a Elasticsearch client in Java.
-Jest is a lightweight client, with an API that is similar to the native client but is REST based.  
+Jest is a lightweight client, with an API that is similar to the native client but is REST based.I had the operations we wanted - to create/delete an index, and more importantly
+bulk operations to add and delete data in bulk, and a 'delete by query' operation to allow deletions of rows identified by some field other than the id. The README in the link
+I have given above contains everything required to set it up and the api details.
 
+###### Create Index
+`JestResult jestResult = jestClient.execute(new CreateIndex.Builder(index).build());`
+
+###### Bulk Insert 
+```
+if(bulkBuilder == null){
+   bulkBuilder = new Bulk.Builder()
+                    .defaultIndex("someIndex")
+                    .defaultType("someType");
+}
+// Add the 'action' to add the new row to the bulk builder
+bulkBuilder.addAction(new Index.Builder(document).build());
+count++;
+// If the number of actions have reached the batchsize you have set,
+// then upload the data and reset it to ready it for more actions
+if(count%batchSize == 0) {
+   JestResult jestResult = jestClient.execute(bulkBuilder.build());
+   count = 0;
+   bulk = new Bulk.Builder()
+             .defaultIndex("someIndex")
+             .defaultType("someType");
+   log.error(jestResult.getErrorMessage());
+}
+```
+
+###### Delete Index
+`JestResult jestResult = jestClient.execute(new DeleteIndex.Builder(index).build());`
+
+###### Delete By Query
+```
+DeleteByQuery deleteAction = new DeleteByQuery.Builder("{\"field\":\""+fieldToBeDeleted+"\"}")
+                .addIndex("someIndex")
+                .addType("someType")
+                .build();
+JestResult jestResult = jestClient.execute(deleteAction);
+log.error(jestResult.getErrorMessage());
+```
 
 
 

@@ -111,13 +111,67 @@ When you allow inbound HTTPS access, or any traffic in one direction, to an inst
               
 #### 5) Network Access Control Lists
 
-An NACL also contains rules to allow traffic based on a source or destination, and every VPC has a default NACL ttat can't be deleted. Unlike a security group, it is stateless, much like an ACL on a router, it doesnt track the state of connections passing through it.
+An NACL also contains rules to allow traffic based on a source or destination, and every VPC has a default NACL ttat can't be deleted. Unlike a security group, it is stateless, much like an ACL on a router, it doesnt track the state of connections passing through it. Note that in a NACL rule you can specify a CIDR only as the source or destination.
+This is unlike a security group rule wherein you can specify another security group for the
+source or destination.
 
 An NACL is not attached to an ENI, but to the subnet. So they can't be used to control traffic between two instances in the same subnet. A subnet can have only one NACL, but an NACL can be attached to many subnets in the same VPC.
  
 ##### Inbound Rules 
 
-Each rule requires Rule number, Protocol, Port range, Source, and Action (Allow or Deny). NACL rules are processed in asecnign order.
+Each rule requires Rule number, Protocol, Port range, Source, and Action (Allow or Deny). NACL rules are processed in ascending order. For example Rule:Number:Protocol:Port Range:Source:Action of 90:TCP:80:0.0.0.0/0:Deny will deny all traffic with a *destination port* of 80. The last rule is numbered \*, and is the default rule that denies all traffic that doesn't fall under any of the other rules.
 
+Web Console - 1. VPC Dashboard, click Network ACLs -> Create Network ACL ->Select the VPC
+              2. Select the NACL ->click the Inbound Rules tab.
+3. If you launched a Linux instance, add an inbound rule numbered 100 to allow SSH
+(TCP port 22) access from any IP address. If you launched a Windows instance, add
+an inbound rule to allow RDP (TCP port 3389) access from any IP address.
+4. Remove any rules that allow other inbound traffic.
+5. Connect to the instance and remain connected.
+6. Now add another inbound rule numbered 90 that denies all traffic. Your connection
+to the instance should drop.
 
+##### Outbound Rules 
 
+Each rule requires Rule number, Protocol, Port range, Destination, and Action (Allow or Deny).
+
+##### Default NACL inbound rules
+  'RuleNum Protocol Port Range Source/Dest Action
+  '100        All       All        0.0.0.0/0   Allow
+  '\*          All       All        0.0.0.0/0    Deny
+  
+"If you do need to restrict access from the subnet—to block Internet access, for
+example—you will need to create an outbound rule to allow return traffic over ephemeral
+ports. Ephemeral ports are reserved TCP or UDP ports that clients listen for reply traffic
+on. As an example, when a client sends an HTTPS request to your instance over TCP port
+80, that client may listen for a reply on TCP port 36034. Your NACL’s outbound rules
+must allow traffic to egress the subnet on TCP port 36034. To maintain compatibility since differnt clients use different ports, do not restrict outbound traffic using a NACL. Use a security group instead.
+If your VPC includes an IPv6 CIDR, AWS will automatically add inbound and outbound
+rules to permit IPv6 traffic"
+
+##### Using Network Access Control Lists and Security Groups Together
+
+#### 6) Public IP Addresses
+
+A public IP address is required if you want the public to access an instance over the internet. You can opt for one when you launch an instance. You *cannot* opt for one later, and if the instance is stopped or terminated, you may lose it.
+
+#### 7) Elastic IP Address
+
+You can request an EIP for your account, after which you have absolute use over it till you release it.
+An EIP is bound to a single ENI at a time, until you dissociate it.
+
+Web Console - 1) VPC Dashboard -> click Elastic IPs -> Click Allocate New Address -> Click Allocate.
+2. Click the EIP, and under the Actions menu, click Associate Address.
+3. Select the instance -> Click Associate.
+
+#### 8) Network Address Translation 
+
+One-to-One NAT
+When you give an ENI a public address, the Internet gateway maps that address to the ENI's private IP address using NAT. So if an instance with private IP address A is associated with EIP B, and wants to send something to an internet host C, it sends a packet Src:Dest=A:C to the internet gateway, that converts it to B:C. Likewise an incoming packet C:B will be converted to C:A.
+
+#### 8) Network Address Translation Devices
+
+Apart from the Internet Gateway, th NAT gateway and the NAT instance (called NAT devices) can also perform translations. This is to allow instances one way access to the internet.
+
+Port Address Translation
+The instance itself doesn't have a public IP address associated with it, but the NAT device does. The packet is sent to the NAT, where the source IP is replaced by the NAT's source IP. At the internet gateway, this is then replaced by the NAT's EIP. Multiple instances can use a NAT device.

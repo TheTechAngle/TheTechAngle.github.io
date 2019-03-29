@@ -88,11 +88,36 @@ a route table containing a default route is called a *public subnet*
                         * Enter 0.0.0.0/0 for dest, For the target, enter the identifier of the Internet gateway -> Click Save.
  #### 4) Security Groups
  
- A security group functions as a firewall to control traffic to and fro the ENI. Every ENI must have a security group, though its a many to many mapping. A security group needs a a group name, description, and VPC, inbound and outbounds routes.
+ A security group functions as a firewall to control traffic to and fro the ENI. Every ENI must have a security group, though its a many to many mapping. A security group needs a a group name, description, and VPC, inbound and outbounds routes. Each VPC contains a default security group that you can’t delete. The most specific rule is applied. 
  
  ##### Inbound Rules
  
- Requires a source, Protocol and port range. It is created with a default-deny or whitelisting, denying all traffic not allowed by a rule
+ Requires a source, Protocol and port range. It is created with a default-deny or whitelisting, denying all traffic not allowed by a rule. For example, if you wanted to allow all TCP traffic coming in from port 443 (default for HTTPS)
+to allow anyone on the internet access to the instance, and maybe SSH access to IP address 198.51.100.10 on port 22 (default port) you'd need - 
+1) Source:Protocol:Port Range - 198.51.100.10/32:TCP:22 and 0.0.0.0/0:TCP:443
+
+##### Outbound Rules
+Requires a Destination, Protocol and port range. The default rule 1) Destination:Protocol:Port Range 0.0.0.0/0:All:All. 
+
+##### Sources and Destinations
+The source and destination in a rule can be any CIDR or the resource ID of a security group.
+
+##### Stateful Firewall 
+When you allow inbound HTTPS access, or any traffic in one direction, to an instance, the security group automatically allows reply traffic from the instance to the client.
+
+* Web Console - EC2 or VPC dashboard -> click Security Groups -> Create Security Group.
+              - Assign the security group a name, and select the VPC
+              - Inbound tab, click Add Rule -> Create.
+              
+#### 5) Network Access Control Lists
+
+An NACL also contains rules to allow traffic based on a source or destination, and every VPC has a default NACL ttat can't be deleted. Unlike a security group, it is stateless, much like an ACL on a router, it doesnt track the state of connections passing through it.
+
+An NACL is not attached to an ENI, but to the subnet. So they can't be used to control traffic between two instances in the same subnet. A subnet can have only one NACL, but an NACL can be attached to many subnets in the same VPC.
+ 
+##### Inbound Rules 
+
+Each rule requires Rule number, Protocol, Port range, Source, and Action (Allow or Deny). NACL rules are processed in asecnign order.
 
 
 

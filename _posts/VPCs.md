@@ -46,7 +46,53 @@ be in the same availability zone (not necessarily same subnet) as the instance.
 An ENI can exist independently of an instance and can be attached and detached as a secondary instance whenever. The instance 
 can be terminated without deleting the ENI.
 
-#### Primary and secondary Private IP Addresses
+##### Primary and secondary Private IP Addresses
 
 Each instance must have a primary private IP address from a range specified in the subnet CIDR, bound to the primary ENI which can't be
 changed, though you can bind secondary addresses.
+
+* Web Console Command - * Network+Security -> Network Interfaces
+                        * Specify subnet, choose default security group
+                        * launch instance into the subnet, attaching ENI as primary ENI
+                    
+#### 4) Internet Gateways
+
+An internet gateway allows the instance to connect to the internet. AWS identifies one by its resource ID, which begins with igw- followed by an alphanumeric string. You need a default route in a route table that points to the Internet gateway as 
+a target.
+
+#### 5) Route Tables
+
+IP routing is implemented as a software function, called an implied or implicit router. a *main route table* is
+created with every VPC, and associated with every subnet. You can have custom route tables. If a subnet is not 
+associated with a table, it will automatically associate with the main route table.
+
+##### Routes
+
+Routing is based only on the destination IP address. A route must include 
+* Destination - IP prefix in CIDR notation
+* Target - AWS network resource (ex Internet gateway or ENI)
+
+###### Local Route
+Every route table has a mandatory local route to allow instances in different subnets to communicate. VPC
+with the CIDR 172.31.0.0/16 would have Destination 172.31.0.0/16 with Target Local.
+
+###### Default Route
+The default route with Destination 0.0.0.0/0 is pointed to the internet gateway as target. A subnet that is associated with 
+a route table containing a default route is called a *public subnet* 
+
+* Web Console Command - * VPC Dashboard -> Internet Gateways -> Create Internet Gateway button -> Click Create.
+                        * Select the Internet gateway you just created, and under the Actions menu, click Attach To VPC.
+                        * Select the VPC you used in the previous exercises and then click Attach.
+                        * VPC Dashboard -> Route Tables -> Main route table for the VPC.
+                        * Click the Routes tab ->click Edit -> Add Another Route button.
+                        * Enter 0.0.0.0/0 for dest, For the target, enter the identifier of the Internet gateway -> Click Save.
+ #### 4) Security Groups
+ 
+ A security group functions as a firewall to control traffic to and fro the ENI. Every ENI must have a security group, though its a many to many mapping. A security group needs a a group name, description, and VPC, inbound and outbounds routes.
+ 
+ ##### Inbound Rules
+ 
+ Requires a source, Protocol and port range. It is created with a default-deny or whitelisting, denying all traffic not allowed by a rule
+
+
+

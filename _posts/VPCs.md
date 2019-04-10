@@ -173,9 +173,38 @@ Web Console - 1) VPC Dashboard -> click Elastic IPs -> Click Allocate New Addres
 One-to-One NAT
 When you give an ENI a public address, the Internet gateway maps that address to the ENI's private IP address using NAT. So if an instance with private IP address A is associated with EIP B, and wants to send something to an internet host C, it sends a packet Src:Dest=A:C to the internet gateway, that converts it to B:C. Likewise an incoming packet C:B will be converted to C:A.
 
-#### 8) Network Address Translation Devices
+#### 9) Network Address Translation Devices
 
 Apart from the Internet Gateway, th NAT gateway and the NAT instance (called NAT devices) can also perform translations. This is to allow instances one way access to the internet.
 
-Port Address Translation
+Port Address Translation aka PAT
 The instance itself doesn't have a public IP address associated with it, but the NAT device does. The packet is sent to the NAT, where the source IP is replaced by the NAT's source IP. At the internet gateway, this is then replaced by the NAT's EIP. Multiple instances can use a NAT device.
+
+#### 10) Configuring Route Tables to Use NAT Devices
+Instances that use a NAT device and the NAT device itself must use differnet routes, different route tables and must reside on different subnets.
+ For example, the NAT device would be on a public subnet, and the instance would be on a private one.
+
+| Subnet | Destination | Target |
+| --- | --- | --- |
+| Private |  0.0.0.0/0 | NAT device |
+| Public | 0.0.0.0/0 | igw-0e538022a0fddc318 |
+
+##### NAT Device - NAT Gateway
+Nothing to manage or access, AWS does it for you. You just create it and assign it an EIP. It can be used in only one subnet. 
+NAT gateway ID is of the form nat-0750b9c8de7e75e9f. If you use multiple NAT gateways, you can create multiple default routes, each pointing to a different NAT gateway
+as the target.
+
+##### NAT Device - NAT Instance
+A NAT instance is a normal EC2 instance that uses a preconfigured Linux-based AMI.
+UNLIKE a NAT Gateway
+* It can't automatically scale to accomodate increased bandwidth requirements.
+* It has an ENI attached to it, so you need to apply a security group, and a public IP address. You should also disable the source/destination
+check on the instance's ENI, to allow it to use source and destination IP addresses other than its own.
+* You can use it as a *bation* or *jump* host, to connect to instances w/o a public IP.
+* NAT instance ID is of the form i-0a1674fe5671dcb00.
+* You cannot create multiple default routes pointing to different NAT instances for resiliency. Why tho
+
+#### 11) VPC Peering 
+Allows instances between two VPCs to communicate. You will need to set up one (and only one) VPC peering connection between the two VPCs.
+They cannot have overlapping CIDR blocks and cannot be used to share internet gateways and NAT devices. You can use it to share Network Load Balancer.
+Routes will have to be set up to allow traffic in both directions, with the VPCs as the target.

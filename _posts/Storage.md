@@ -55,5 +55,63 @@ S3 Standard (99.99) == Reduced Redundancy > S3 Standard IA (99.9) > S3 One Zone 
 the creation (PUT) of new objects.
 
 ## (C) S3 Object Lifestyle
+### 1) Versioning
+* By default saving a file with the same name and location as another will overwrite it
+* Enabling versioning saves old copies indefinitely
+
+### 2) Lifecycle Management
+* You can set the lifecycle rules for a bucket, to move an object's storage class after a number of days,
+eventually deleting it.
+* You can apply them to only certain objects in the bucket
+* There a minimum time an object must spend in one class before it can be moved (30 days)
+
+## (D) Accessing S3 Objects
+
+### 1) Access Control
+* Access Control List (ACL) - Dont use, IAM ancestor
+* S3 bucket policies - JSON text attached to your S3 bucket - limited scope (LINK)
+* IAM policies - Contorla how users and roles access resources
+
+### 2) Presigned URLs 
+* Expire after a certain period of time 
+* aws s3 presign s3://MyBucketName/PrivateObject --expires-in 600
+
+### 3) Static Website Hosting
+
+* Store the file, and set the index.html as your index doc in the bucket Properties tab
+* You can also get a free SSL/TLS certificate to encrypt your site by requesting a certificate
+from Amazon Certificate Manager (ACM) and importing it into a CloudFront distribution
+that specifies your S3 bucket as its origin.
+
+### 4) S3 and Glacier Select 
+* For efficient, cost effective storage
+
+## (E) Amazon Glacier
+
+* 99.999999% durability, and can be incorporated into the S3 lifecycle config.
+* Stored in vaults instead of buckets
+* Vault names don't have to be globally unique
+* 40TB archive limit, unlike the S3's 5TB limit
+* Default archive encryption, S3's to be enabled
+* Machine generated Ids, S3's are human readable
+* VERY long retrieval time, meant for unusual in frequent access
+
+## (F) Storage Pricing
+
+* Charged for storage, data retrieval operations like GET and PUT and lifecycle transition requests
+* https://aws.amazon.com/s3/pricing/.
+
+## (G) Other Storage-Related Services
+#### 1) Amazon Elastic File System
+EFS-based files are designed to be accessed from within a VPC via
+Network File System (NFS) mounts on EC2 instances or from your on-premises servers
+through AWS Direct Connect connections. Enables secure,low-latency, and durable file sharing among multiple instances.
+
+#### 2) AWS Storage Gateway
+Local devices can connect to the appliance as though it’s a physical backup device like a tape drive, while the data itself is saved to AWS platforms
+
+#### 3) AWS Snowball
+
+When requested, AWS will ship you a physical, 256-bit, encrypted Snowball storage device onto which you’ll copy your data. You then ship the device back to Amazon where its data will be uploaded to your S3 bucket(s).
 
 

@@ -21,3 +21,21 @@ account-wide budgets and enable MFA Delete on an S3 bucket.
 * Assign a long and complex password and store it in a secure password vault.
 * Enable multifactor authentication (MFA) for the root account.
 * Wherever possible, don’t use root to perform administration operations.
+
+Users can use the My Security Credentials page to view settings and 
+* retrieving you Amazon ID
+* Update a password
+* Managing MFA
+* Managing access keys
+* Generating key pairs for authenticating signed URLs
+* Generating X.509 certificates to encrypt Simple Object Access Protocol (SOAP)
+requests to those AWS services that allow it 
+NOTE: SOAP requests to S3 and Amazon Mechanical Turk are an exception to this
+rule, as they use regular access keys rather than X.509 certificates.
+
+### Access Keys
+* You can make your local environment aware of the access key ID and secret access key.
+* Deactivate unused keys
+* Key rotation can be ensured in the password policy of IAM account, where keys are replaces every x number of days
+* aws iam get-access-key-last-used --access-key-id ABCDEFGHIJKLMNOP can be used to determine whether any applications are still using an old key.
+*

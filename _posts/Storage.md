@@ -3,7 +3,7 @@
 S3 is object oriented storage, and an S3 bucket and its contents exist only within a region, but the name must be GLOBALLY unique.
 
 * Block-level storage - data on a raw physical storage device is divided into individual blocks whose use is managed by a file system. NTFS is a common file system used by Windows, while Linux might use Btrfs or ext4.
-* Object storage - data is stored more on a flat surface. 
+* Object storage (S3) - data is stored more on a flat surface and avoids some of the OS-related complications of block storage, allowing anyone easy access to the storage capacity. 
 
 Access over HTTP - https://s3.amazonaws.com/bucketname/filename
 Acess over AWS CLI - s3://bucketname/filename
@@ -13,7 +13,7 @@ You can use prefixes and delimiters to give your buckets the appearance of a mor
 
 ### 2) Working with Large Objects
 No upper limit.
-* Single object limit -  5TB
+* Single object size limit -  5TB
 * individual upload - 5GB
 * Multipart Upload (!!! I've used this) for objects larger than 100MB. THe object is broken into many parts and uploaded. If any part fails, it can be tried again without affecting the other parts.
 * CLI command to upload (aws s3 cp mylocalfile.txt s3://mybucketname/)
@@ -44,8 +44,9 @@ the Amazon S3 encryption client.
 
 ### 1) Durability - Your data endures
 * The high durability rates delivered by most S3 are largely because they automatically replicate your data across at least three availability zones, with S3 standards having a durability % of 99.999999999%
-* Amazon S3 One Zone-Infrequent Access (S3 One Zone-IA), stores data in only a single availability zone.
+* Amazon S3 One Zone-Infrequent Access (S3 One Zone-IA), stores data in only a single availability zone, but durability of 99.999999999%
 * Reduced Redundancy Storage (RRS) is rated at only 99.99% durability (because it’s replicated across fewer servers than other classes).
+* S3 Standard == S3 One Zone > RRS
 
 ### 2) Availability - Can you connect?
 S3 Standard (99.99) == Reduced Redundancy > S3 Standard IA (99.9) > S3 One Zone (99.5) % in a year

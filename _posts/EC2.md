@@ -45,3 +45,14 @@ physical server that’s concurrently hosting other instances.
 The Dedicated Instance option ensures that your instance will run
 on its own dedicated physical server.
 The Dedicated Host option allows you to actually identify and control the physical server
+
+#### Configuring Instance Behavior
+
+* Bootstrapping: The EC2 can execute commands as it boots based on user data in your instance configuration
+
+#### Instance Pricing 
+
+* On-demand model - flexible, can control how much you pay by stopping and starting your instances according to your need. Most expensive per hour.
+* Reserve Instance -for 24/7 instances, for more than a year
+
+one or two reserve instances to cover its normal customer demand but also allow autoscaling to automatically launch on-demand instances during periods of unusually high demand.

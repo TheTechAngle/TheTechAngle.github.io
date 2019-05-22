@@ -56,3 +56,15 @@ The Dedicated Host option allows you to actually identify and control the physic
 * Reserve Instance -for 24/7 instances, for more than a year
 
 one or two reserve instances to cover its normal customer demand but also allow autoscaling to automatically launch on-demand instances during periods of unusually high demand.
+
+#### Instance Lifecycle
+
+* Terminating - Will shut it down, resources will be reallocated
+* Stopping - Will lose nonpersistent public IP address and data on instance volume, but not data on EBS vol
+
+You can also change its instance type to increase or decrease its compute, memory, and stor-
+age capacity. You will need to stop the instance, change the type, and then restart it.
+
+#### Resource Tags
+
+AWS resource tags can be used to label everything. 

@@ -28,6 +28,7 @@
 * Coordinates work across application components, coordination of tasks (invocations of various processing steps, including human actions)
 * Workflow executions can last upto 1 year
 * Task oriented API (vs SQS msg oriented)
+* HTTP based API, can be interacted with any language
 * Task is assigned only once, never duplicated
 * Keeps track of all the tasks and events in an application.
 * SWF ACTORS  
@@ -40,7 +41,8 @@ Activity Workers - carry out the tasks
 * A web service that makes it easy to set up, operate and semd notifications from the cloud.
 * Allows applications to push messages and immediately allow subscriber to recieve them
 * Can deliver notifications directly to mobile devices, via sms or email, or to SQS or to any HTTP end point.
-* A topic is an access point
+* SES (Simple email service)
+* A topic is an access point, on its creation, an amazon resource name is created
 * One topic can support multiple endpoint types
 * Stored redundantly across multiple instances
 * Push based, no polling
@@ -73,4 +75,32 @@ How do I configure
   * Set security
   * Choose target (such as EC2, Lambda etc)
   * Set request and response transformations
-* 
+* If you're using Javascript/AJAX that uses multiple domains with API Gateway, enable CORS
+* CORS is enforced by the client (browser, but not curl or Postman)
+
+### Kinesis
+
+* For streaming data (generated continuously but in small packets)
+* Load and analyze, and build cuotme applications
+* Kinesis Streams
+  * Stores the streaming data from 24 hrs to 7 days
+  * Stored in shards, like a shard for each type of data
+  * EC2 can analyze the data in the shards, and store it elsewhere
+  * 5 tps for reads, 1000 records per second for writes
+  * Max 2MB data read rate per sec, max 1MB total write rate per second
+  * Total capacity of the stream is the sum of the capacity of its shards
+  
+* Kinesis Firehose
+  * No persistent storage
+  * Soon as it comes in, can trigger a lambda function INSIDE the firehose that processes it and stores it elsewhere (S3)
+  * Kinesis Analytics analyses data in both
+  
+  ### Web Identity Federation and Cognito
+  
+  * Web Identity Federation: Gives temporary AWS access (mapped to an IAM role) after signing in with a web based identity provider like Amazon or Google, that gives you a token to Cognito, which then provided the access
+  * Cognito acts as an Identity broker between your application and web ID providers
+  * User Pools are user directories used to manage sign up and sign in functionality for mobile and web applications, handles user registration and authentication.
+  * Identity Pool provides temporary AWS credentials to the resources
+  * User -> User Pool -> Social Media -> User Pool -JWT Token-> User -JWT Token-> Identity Pool -AWS credential-> User -> AWS
+    * Successful authentication provides a JSON Web token (JWT)
+  * Uses SNS to let all devices associated with the user's user pool when data changes

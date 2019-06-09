@@ -1,0 +1,76 @@
+
+
+### Amazon SQS
+  
+* Distributed fail-safe queue system that stores messages while waiting for a computer to process them.
+* Messages can contain upto 256KB of text in any format.
+* Queue can act as a buffer if the producer and consumer operate at different speens
+* Pull based
+* Messages can be stored in the queue for 1 minute to 14 days, default is 4
+* Visibility Time - Is the amount of time the message is invisible in the SQS queue after a reader picks up the message.
+* If the job is not processed within this time, the message becomes visible again for another reader to process it
+* If the job is processed within this time, the message is removed off the queue.
+* Visibility Time max time out is 12 hours
+* Long polling doesn't return a response until a message arrives in the queue, or it times out. SAVES MONEY
+* Short polling return immediately, even if queue is empty
+#### Standard Queues 
+* Nearly unlimited number of transactions per second.
+* Guarantee that a message is delivered at least once.
+* Best Effort Ordering.
+
+#### FIFO Queue
+* No duplicates
+* Strictly ordered
+* Limited to 300 transactions per sec (TPS)
+
+### Simple Work Flow Service (SWF)
+
+* Coordinates work across application components, coordination of tasks (invocations of various processing steps, including human actions)
+* Workflow executions can last upto 1 year
+* Task oriented API (vs SQS msg oriented)
+* Task is assigned only once, never duplicated
+* Keeps track of all the tasks and events in an application.
+* SWF ACTORS  
+Workflow Starters - initiate a workflow
+Deciders - control the flow of tasks, once a task finishes or fails
+Activity Workers - carry out the tasks
+
+### SNS (SImple Notification Service)
+
+* A web service that makes it easy to set up, operate and semd notifications from the cloud.
+* Allows applications to push messages and immediately allow subscriber to recieve them
+* Can deliver notifications directly to mobile devices, via sms or email, or to SQS or to any HTTP end point.
+* A topic is an access point
+* One topic can support multiple endpoint types
+* Stored redundantly across multiple instances
+* Push based, no polling
+* Inexpensive, pay as you go model
+
+### Elastic Transcoder
+
+* Media transcoder in the cloud, to convert media files to different formats..
+* Provides preset transcoder based on different devices so you don't have to guess
+* Pay by the minutes and resolution you transcode
+
+### API Gateway
+
+* With a few clicks, you can set up an API to access data, logic, functionality from your backend.
+* Uers call the API Gateway, which then redirects to the service
+* Exposes HTTPS endpoints to define a RESTful API
+* Serverless-ly connect to services like Lambda & DynamoDB
+* Can send each API endpoint to different target
+* Runs efficiently with low cost
+* Scales effortlessly
+* Throttles requests to prevent attacks
+* Maintain multple versions of API (test vs pros)
+* Can enable caches for responses for a specified TTL (time to live)
+* Deploy to a stage, uses API GAtewat domain by default. Supports AWS certificate manager, free SSL/TLS certs
+How do I configure
+* Define an API (Container)
+* Define resources and nested resources (URL paths)
+* For each resource 
+  * Select the HTTP methods (verbs)
+  * Set security
+  * Choose target (such as EC2, Lambda etc)
+  * Set request and response transformations
+* 

@@ -16,6 +16,9 @@ When transacations can take place as if in parallel, but in reality might take p
 Many times, data will be replicated across nodes. The consistency of a system is a way of stating how quickly and accurately the data is updated across the nodes such that it is consistent across all the nodes.See also strong consistency and eventual consistency.
 See [here](https://mwhittaker.github.io/consistency_in_distributed_systems/1_baseball.html) for a detailed explanation.
 
+### Cross origin resource sharing 
+Allows restricted resource on a web page to be requested from another domain outside the domain from which th efirst resource was served. Browser makes an HTTP OPTIONS (GET PUT POST) call for a url, and the server retursn a response saying "These other domains are approved to GET this url"
+
 ### Durability
 The durability of a system guarantees that data that is committed persists, or is saved permanently.
 
@@ -30,6 +33,7 @@ Rather than allocating space for the file content as soon as it is created, the 
 
 ### Same origin policy 
 A web browser permits scripts contained in a first web page to access data in a second web page only if bothe web pages have the same origin.to prevent Cross-Site Scripting (XSS) attacks.
+
 ### Serializability 
 A transaction schedule is serializable if there exists a schedule where the transactions are executed in some sequence with the same outcome.
 

@@ -28,6 +28,8 @@ Organizing data for fast retrieval
 ### Lazy space allocation
 Rather than allocating space for the file content as soon as it is created, the data is written onto a buffer first. This improves the chance that the data is written in a contiguous group of blocks, reducing fragmentation problems and increasing performance. 
 
+### Same origin policy 
+A web browser permits scripts contained in a first web page to access data in a second web page only if bothe web pages have the same origin.to prevent Cross-Site Scripting (XSS) attacks.
 ### Serializability 
 A transaction schedule is serializable if there exists a schedule where the transactions are executed in some sequence with the same outcome.
 

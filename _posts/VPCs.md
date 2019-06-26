@@ -13,7 +13,17 @@ you have full control over the virtual network and can deploy AWS resources.
 * Unlike a traditional TCP/IP network, a VPC doesn't have components like routers, switches etc. Instead it
 they're abstracted into software functions, allowing it to scale.
 
+
+* There are two ways for you to hit it - an internet gateway and a virtual private gateway. These hit the router and get routed to a network ACL, which acts as a first line of defense
+* A new VPC will always have a Route table and a default NACL and security group, but nothing else
+* This then connects it to a subnet. Subnets have the security groups.
+* Only 1 internetgateway per VPC
+* An instance has an ENI connected to only one subnet
+* Both VPCS and ENI have security groups
+* Always have a separate route table for the public subnet, to associate it with the private subnets
+
 #### 1) VPC CIDR Blocks
+* Largest allowed 10.0.0.0/16, smallest 10.0.0.0/28
 * CIDR - Classless interdomain routing block - a range of contiguous IP addresses. For example, the CIDR 
 (10.0.0.0/8) includes all addresses from 10.0.0.0–10.255.255.255.
 * Secondary CIDR Blocks - These blocks MUST come from either the *same address range* as the primary or a publicly
@@ -25,13 +35,16 @@ prefix form the global unicast IPv6 address space. The prefix length is always /
 
 
 #### 2) Subnets
-A subnet is a logical container within a VPC that holds your EC2 instances, to control and organize your internet access and control.
-Once an instance is launched into a subnet, you can't move it. You will need to terminate it and create a new one.
-
+* A subnet cannot be spread over more than one availability zone.
+* A subnet is a logical container within a VPC that holds your EC2 instances, to control and organize your internet access and control.
+* Once an instance is launched into a subnet, you can't move it. You will need to terminate it and create a new one.
+* You need to explicitly enable public ipv4 to allow EC2 instances within to be assigned public ip addresses
 * Subnet CIDR blocks - The CIDR block for your subnet has to be a subset of your VPC primary or secondary CIDR block.
 They can't overlap and cannot be changed, and it cannot have more than one CIDR block.
 The first four and last IP addresses are reserved by AWS. For example if your CIDR block is 172.16.100.0/16, then 172.16.100.0-172.16.100.3
 and 172.16.100.255 will be reserved.
+
+* Bastion host - an EC2 instance in a public subnet used to ssh into an EC2 instance in a private subnet
 
 ##### Availability Zones
 
@@ -71,7 +84,7 @@ created with every VPC, and associated with every subnet. You can have custom ro
 associated with a table, it will automatically associate with the main route table.
 
 ##### Routes
-
+A subnet can have multiple route tables
 Routing is based only on the destination IP address. A route must include 
 * Destination - IP prefix in CIDR notation
 * Target - AWS network resource (ex Internet gateway or ENI)
@@ -81,7 +94,7 @@ Every route table has a mandatory local route to allow instances in different su
 with the CIDR 172.31.0.0/16 would have Destination 172.31.0.0/16 with Target Local.
 
 ###### Default Route
-The default route with Destination 0.0.0.0/0 is pointed to the internet gateway as target. A subnet that is associated with 
+The default route with Destination (0.0.0.0/0 for ipv4 and ::/0 for ipv6) is pointed to the internet gateway as target. A subnet that is associated with 
 a route table containing a default route is called a *public subnet* 
 
 * Web Console Command - * VPC Dashboard -> Internet Gateways -> Create Internet Gateway button -> Click Create.

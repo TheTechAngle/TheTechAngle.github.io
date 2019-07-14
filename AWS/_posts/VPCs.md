@@ -1,10 +1,10 @@
 NOTES
 =====
 Edge locations also work the other way round, uploading your data quickly
-5 VPCs in a region allowed, not charged for VPC, since its just a containeer
+5 VPCs in a region allowed, not charged for VPC, since its just a container
 You need to be able to build your own VPC from memory. 
 
-What is it?
+### What is it?
 
 The networking layer of AWS, the Amazon Virtual Private Cloud lets you provision a logically isolated section of the cloud where
 you have full control over the virtual network and can deploy AWS resources.
@@ -29,8 +29,7 @@ they're abstracted into software functions, allowing it to scale.
 * Secondary CIDR Blocks - These blocks MUST come from either the *same address range* as the primary or a publicly
 routable range, but they must not overlap with the primary or other secondary blocks. If the VPC’s primary CIDR is 172.16.0.0/16, you may specify a secondary CIDR
 of 172.17.0.0/16. But you may not specify 192.168.0.0/16.
-* IPv6 CIDR Blocks - You can't choose this block, it will be allocated to you at your request. The IPv6 CIDR will be publicly routable
-prefix form the global unicast IPv6 address space. The prefix length is always /56
+* IPv6 CIDR Blocks - You can't choose this block, it will be allocated to you at your request. The IPv6 CIDR will be publicly routable prefix form the global unicast IPv6 address space. The prefix length is always /56
 * CLI command - aws ec2 create-vpc-cidr-block 172.16.0.0/16
 
 
@@ -57,8 +56,7 @@ You must ALWAYS assign an IPv4 CIDR block to a subnet. (WHY)
 
 #### 3) Elastic Network Interfaces
 An elastic network interface performs the same basic functions as a network interface on a physical server. Every instance must have a
-primary network interface (aka primary ENI) which is connected to only one subnet. It is possible to have additional ENIs, bu thtey must
-be in the same availability zone (not necessarily same subnet) as the instance.
+primary network interface (aka primary ENI) which is connected to only one subnet. It is possible to have additional ENIs, bu they must be in the same availability zone (not necessarily same subnet) as the instance.
 
 An ENI can exist independently of an instance and can be attached and detached as a secondary instance whenever. The instance 
 can be terminated without deleting the ENI.
@@ -106,6 +104,9 @@ a route table containing a default route is called a *public subnet*
  #### 4) Security Groups
  
  A security group functions as a firewall to control traffic to and fro the ENI. Every ENI must have a security group, though its a many to many mapping. A security group needs a a group name, description, and VPC, inbound and outbounds routes. Each VPC contains a default security group that you can’t delete. The most specific rule is applied. 
+ 
+ * Allow ICMP type access to be able to ping
+ * Associated with ENIs/EC2s, not subnets
  
  ##### Inbound Rules
  
@@ -221,3 +222,14 @@ check on the instance's ENI, to allow it to use source and destination IP addres
 Allows instances between two VPCs to communicate. You will need to set up one (and only one) VPC peering connection between the two VPCs.
 They cannot have overlapping CIDR blocks and cannot be used to share internet gateways and NAT devices. You can use it to share Network Load Balancer.
 Routes will have to be set up to allow traffic in both directions, with the VPCs as the target.
+
+#### 12) Setting up your own VPC
+
+1) Create a VPC with primary CIDR as you see fit (eg 10.0.0.0/16) and Amazon provided IPv6 CIDR block
+1.5) This will create a route table, a network ACL, and a security group
+2) Create two subnets within, with subsets of IP addresses that don't overlap. Allow one to have publicly assigned IP addresses
+3) Create an internet gateway, and attack it to the VPC. ONLY ONE PER VPC
+4) Create a 'public' route table (map 0.0.0.0/0 and ::/0 to the intergateway) and  associate the subnet with this route table
+4) Spin up two EC2 instances, one in each subnet
+4.5) For the Web (public EC2 instance) create a new security group which allows SSH and HTTP from 0.0.0.0/0 and ::/0 to enable internet access. Download the key pair created
+4.5) For the DB (private EC2 instance)create a new security group which allows SSH, HTTPS, HTTP and ICDMP from the public subnet's CIDR 

@@ -81,6 +81,14 @@ If the application code can issue Signature Version 4 signed request, then no pr
 
 Recently though, Amazon has released the [Amazon Cognito Authentication](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html) for Kibana, which should be easier to use and control access with.
 
+##### Connecting to Elasticsearch behind a Virtual Private Cloud
+
+I spent hours and hours reading up about our use case. Our elasticsearch cluster is behind a virtual private cloud making it really really hard.  When we placed our ES within the VPC, the endpoint that was created was NOT a [VPC Endpoint](https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html) but an [Elasticsearch endpoint within a VPC](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html), which are two wildly different things. The former allows access into a VPC, the latter allows access to ES within a VPC. So then, we had to give our Lambda function access to the VPC
+ 
+This link summarizes it pretty well (https://medium.com/@lichnguyen/setup-aws-lambda-permission-to-query-aws-elasticsearch-and-send-notification-to-aws-sns-126ed2181b84) and there are additional AWS docs you can read to learn more (https://docs.aws.amazon.com/lambda/latest/dg/vpc.html) 
+ 
+We had to add the AWSLambdaVPCAccessExecutionRole to the Lambda role, and the rest of the EC2 roles. You’ll have to go the Lambda function on the console and choose VPC access, choose the VPC, and give it subnets and security groups. Note that Elasticsearch places an endpoint in one subnet in each availability zone, so make sure you choose these subnets in the Lambda section. Follow those two posts. Once this is done, the lambda function should be able to connect to ES with a elasticsearch client code.
+ 
 ##### Elasticsearch Indexes and Types
 
 An index is stored in a set of shards which are themselves Lucene indices. 

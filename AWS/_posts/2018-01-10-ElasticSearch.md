@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [AWS] Using Elasticsearch 
+title: (AWS) Using Elasticsearch 
 ---
 
 #### What is Elasticsearch?

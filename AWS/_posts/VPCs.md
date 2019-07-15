@@ -1,4 +1,4 @@
-NOTES
+NOTES FROM CLOUD GURU's AWS CERTIFIED SOLUTIONS ARCHITECT COURSE
 =====
 Edge locations also work the other way round, uploading your data quickly
 5 VPCs in a region allowed, not charged for VPC, since its just a container
@@ -212,7 +212,7 @@ as the target.
 A NAT instance is a normal EC2 instance that uses a preconfigured Linux-based AMI.
 UNLIKE a NAT Gateway
 * It can't automatically scale to accomodate increased bandwidth requirements.
-* It has an ENI attached to it, so you need to apply a security group, and a public IP address. You should also disable the source/destination
+* It has an ENI attached to it, so you need to apply a security group, and a public IP address. You should also disable the source/destination checks for the EC2 instance to act as a NAT device, as it should be able to route traffic when it itself isn't the source or destination for traffic.
 check on the instance's ENI, to allow it to use source and destination IP addresses other than its own.
 * You can use it as a *bation* or *jump* host, to connect to instances w/o a public IP.
 * NAT instance ID is of the form i-0a1674fe5671dcb00.
@@ -229,7 +229,9 @@ Routes will have to be set up to allow traffic in both directions, with the VPCs
 1.5) This will create a route table, a network ACL, and a security group
 2) Create two subnets within, with subsets of IP addresses that don't overlap. Allow one to have publicly assigned IP addresses
 3) Create an internet gateway, and attack it to the VPC. ONLY ONE PER VPC
-4) Create a 'public' route table (map 0.0.0.0/0 and ::/0 to the intergateway) and  associate the subnet with this route table
+4) Create a 'public' route table (map outbound 0.0.0.0/0 and ::/0 to the internet gateway) and  associate the subnet with this route table
 4) Spin up two EC2 instances, one in each subnet
 4.5) For the Web (public EC2 instance) create a new security group which allows SSH and HTTP from 0.0.0.0/0 and ::/0 to enable internet access. Download the key pair created
 4.5) For the DB (private EC2 instance)create a new security group which allows SSH, HTTPS, HTTP and ICDMP from the public subnet's CIDR 
+5) We'll need a NAT Gateway to all the private EC2 to download stuff off of the internet. (NAT instances on their way out, but they sit in the public subnet, and the route tables in private subnets route outbound traffic to the NAT instance). Attach it to the public subnet and create a new Elastic IP Allocation.
+6) Edit the private subnet' route table to direct all outbound (0.0.0.0/0) traffic to NAT Gateway

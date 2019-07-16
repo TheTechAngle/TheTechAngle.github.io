@@ -1,5 +1,7 @@
-NOTES FROM CLOUD GURU's AWS CERTIFIED SOLUTIONS ARCHITECT COURSE
+AWS' Virtual Private Cloud
 =====
+#### NOTES FROM CLOUD GURU's AWS CERTIFIED SOLUTIONS ARCHITECT COURSE
+
 Edge locations also work the other way round, uploading your data quickly
 5 VPCs in a region allowed, not charged for VPC, since its just a container
 You need to be able to build your own VPC from memory. 
@@ -129,7 +131,7 @@ When you allow inbound HTTPS access, or any traffic in one direction, to an inst
               
 #### 5) Network Access Control Lists
 
-An NACL also contains rules to allow traffic based on a source or destination, and every VPC has a default NACL ttat can't be deleted. Unlike a security group, it is stateless, much like an ACL on a router, it doesnt track the state of connections passing through it. Note that in a NACL rule you can specify a CIDR only as the source or destination.
+An NACL also contains rules to allow traffic based on a source or destination, and every VPC has a default NACL that can't be deleted. Unlike a security group, it is stateless, much like an ACL on a router, it doesnt track the state of connections passing through it. Note that in a NACL rule you can specify a CIDR only as the source or destination.
 This is unlike a security group rule wherein you can specify another security group for the
 source or destination.
 
@@ -223,6 +225,15 @@ Allows instances between two VPCs to communicate. You will need to set up one (a
 They cannot have overlapping CIDR blocks and cannot be used to share internet gateways and NAT devices. You can use it to share Network Load Balancer.
 Routes will have to be set up to allow traffic in both directions, with the VPCs as the target.
 
+#### 12) Direct Connect
+
+Establish a private connection between AWS and your datacentre/office, to reduce costs and increase bandwidth
+
+#### 13) VPC Endpoint
+* Connects VPC to a supported AWS service powered by PrivateLink without require any sort of NAT Gateway ot internet gateway.
+* Horizontally scaled, redundant and highly available VPC components
+1) Interface Endpint - ENI with a private IP address that serves as an entry point for traffic
+2) Gateway Endpoint - Works a littel like a NAT Gateway.  Only supported fro S3 and DynamoDB
 #### 12) Setting up your own VPC
 
 1) Create a VPC with primary CIDR as you see fit (eg 10.0.0.0/16) and Amazon provided IPv6 CIDR block
@@ -235,3 +246,5 @@ Routes will have to be set up to allow traffic in both directions, with the VPCs
 4.5) For the DB (private EC2 instance)create a new security group which allows SSH, HTTPS, HTTP and ICDMP from the public subnet's CIDR 
 5) We'll need a NAT Gateway to all the private EC2 to download stuff off of the internet. (NAT instances on their way out, but they sit in the public subnet, and the route tables in private subnets route outbound traffic to the NAT instance). Attach it to the public subnet and create a new Elastic IP Allocation.
 6) Edit the private subnet' route table to direct all outbound (0.0.0.0/0) traffic to NAT Gateway
+7) NACL - Default allows all inboud and outbound traffic. A custom one will deny everything.
+Create a new one for the public subnet. Allow Inbound HTTP, HTTPS, SSH (80, 443 and 22) from 0.0.0.0/0 and allow outbound HTTP, HTTPS, Custom TCP Rule (80, 443, 1024-65535 ephemeral ports) to 0.0.0.0/0

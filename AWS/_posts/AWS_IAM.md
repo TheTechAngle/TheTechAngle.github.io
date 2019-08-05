@@ -1,6 +1,8 @@
 On AWS, authentication and authorization are primarily handled by Identity and Access Management (IAM).
 Users or applications without AWS accounts can be authenticated and given temporary access to AWS resources using an external service such as Kerberos, Microsoft Active Directory, or the Lightweight Directory Access Protocol (LDAP).
 
+Anything done in IAM is done in region 'Global'
+
 ## 1) IAM Identities
 * Every AWS account has a default root user, with full rights to everything in the account
 * Hence, root is the point of weakness
@@ -38,4 +40,5 @@ rule, as they use regular access keys rather than X.509 certificates.
 * Deactivate unused keys
 * Key rotation can be ensured in the password policy of IAM account, where keys are replaces every x number of days
 * aws iam get-access-key-last-used --access-key-id ABCDEFGHIJKLMNOP can be used to determine whether any applications are still using an old key.
-*
+* Users assigned Access key id - username, secret access key - password for programmatic access
+* New users have NO permissions when created

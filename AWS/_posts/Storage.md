@@ -1,4 +1,4 @@
-## (A) S3 Service Architecture
+## (A) S3 (Simple Storage Service) Architecture
 
 S3 is object oriented storage, and an S3 bucket and its contents exist only within a region, but the name must be GLOBALLY unique.
 
@@ -43,17 +43,21 @@ the Amazon S3 encryption client.
 ## (B) S3 Durability and Availabilty
 
 ### 1) Durability - Your data endures
-* The high durability rates delivered by most S3 are largely because they automatically replicate your data across at least three availability zones, with S3 standards having a durability % of 99.999999999%
-* Amazon S3 One Zone-Infrequent Access (S3 One Zone-IA), stores data in only a single availability zone, but durability of 99.999999999%
+* The high durability rates delivered by most S3 are largely because they automatically replicate your data across at least three availability zones
+* ALL S3 having a durability % of 99.999999999% (ELEVEN 9s) cept RRS
+* S3 Infrequent Access (S3 IA) - data that is accessed less frequently, but rapid access when needed. Lesser cost
+* S3 One Zone-Infrequent Access (S3 One Zone-IA), stores data in only a single availability zone
+* S3 Intelligent Tiering - moves it around the other tiers based on what its learnt about your access with ML
 * Reduced Redundancy Storage (RRS) is rated at only 99.99% durability (because it’s replicated across fewer servers than other classes).
 * S3 Standard == S3 One Zone > RRS
 
 ### 2) Availability - Can you connect?
-S3 Standard (99.99) == Reduced Redundancy > S3 Standard IA (99.9) > S3 One Zone (99.5) % in a year
+*S3 Standard (99.99)* == Reduced Redundancy > S3 Standard IA (99.9) > S3 One Zone (99.5) % in a year
 
 ### 3) Eventually Consistent Data
 * Because there isn’t the risk of corruption, S3 provides read-after-write consistency for
-the creation (PUT) of new objects.
+the creation (PUT) of new objects (able to read immediately)
+* Overwriting is eventual consistency, you may get version 1 if you try within a second.
 
 ## (C) S3 Object Lifestyle
 ### 1) Versioning
@@ -65,6 +69,8 @@ the creation (PUT) of new objects.
 eventually deleting it.
 * You can apply them to only certain objects in the bucket
 * There a minimum time an object must spend in one class before it can be moved (30 days)
+
+### 3) MFA deletes
 
 ## (D) Accessing S3 Objects
 
@@ -96,11 +102,14 @@ that specifies your S3 bucket as its origin.
 * Default archive encryption, S3's to be enabled
 * Machine generated Ids, S3's are human readable
 * VERY long retrieval time, meant for unusual in frequent access
+* Deep archive can take upto 12 hours
 
 ## (F) Storage Pricing
 
 * Charged for storage, data retrieval operations like GET and PUT and lifecycle transition requests
 * https://aws.amazon.com/s3/pricing/.
+* Cross Region Replication - 
+* Amazon S3 transfer Acceleration - fast and easy transfers(uploads and downloads) using edge locations
 
 ## (G) Other Storage-Related Services
 #### 1) Amazon Elastic File System
@@ -115,4 +124,5 @@ Local devices can connect to the appliance as though it’s a physical backup de
 
 When requested, AWS will ship you a physical, 256-bit, encrypted Snowball storage device onto which you’ll copy your data. You then ship the device back to Amazon where its data will be uploaded to your S3 bucket(s).
 
+READ S3 FAQS BEFORE TAKING THE EXAM
 

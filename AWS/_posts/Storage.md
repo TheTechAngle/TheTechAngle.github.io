@@ -19,7 +19,8 @@ No upper limit.
 * CLI command to upload (aws s3 cp mylocalfile.txt s3://mybucketname/)
 
 ### 3) Encryption
-Use only Amazon’s encrypted API endpoints for data transfers.
+* Encryption in transit is achieved by SSL/TLS
+* Use only Amazon’s encrypted API endpoints for data transfers.
 
 #### Server-Side Encryption for data at rest
 3 options allowed by AWS for encrypting data on AWS
@@ -63,6 +64,10 @@ the creation (PUT) of new objects (able to read immediately)
 ### 1) Versioning
 * By default saving a file with the same name and location as another will overwrite it
 * Enabling versioning saves old copies indefinitely
+* Cannot disable versioning once enables. Can be suspended
+* Size of the S3 bucket is th sum of all versions
+* Even deltes are available
+* Has MFA delete capabil ity
 
 ### 2) Lifecycle Management
 * You can set the lifecycle rules for a bucket, to move an object's storage class after a number of days,
@@ -120,9 +125,31 @@ through AWS Direct Connect connections. Enables secure,low-latency, and durable 
 #### 2) AWS Storage Gateway
 Local devices can connect to the appliance as though it’s a physical backup device like a tape drive, while the data itself is saved to AWS platforms
 
+* File Gateway - for flat files to be stored directly on S3
+* Volume Gateway - Stored Volumes - Entire dataset stored on site and asynchronously backed up to S3
+* Volume Gateway - Cached Volumes - Entire dataset stored on S3 and most frequently accessed is cached on site
+* Gateway Virtual Tape Library
+
 #### 3) AWS Snowball
 
 When requested, AWS will ship you a physical, 256-bit, encrypted Snowball storage device onto which you’ll copy your data. You then ship the device back to Amazon where its data will be uploaded to your S3 bucket(s).
+
+Snowball edge offers both 
+
+## H) Cross Region Replication
+* Needs versioning enabled source and destination buckets
+* Regions must be unique
+* Existing files in bucket not replicted automatically
+* Delete markers and deleting versions not replicated
+
+## I) S3 Transfer Acceleration and CloudFront
+* edge locations to accelerate uploads and downloads
+* edge locations have caches, stored upto the ttl (time to live)
+* Invalidating cached content is possible, you will be charged for it. Create invalidation in the CloudFrontDistributions
+* Content Delivery Network (CDN) a system of distributed servers that delivers content to a user based on their geographic position, the origin of the webpage and a content deliver server
+* A CDN is a network of edge locations, also called distribution
+* Cloud Front offers two types of distributions - a web distribution for websites and RTMP for media streaming
+
 
 READ S3 FAQS BEFORE TAKING THE EXAM
 

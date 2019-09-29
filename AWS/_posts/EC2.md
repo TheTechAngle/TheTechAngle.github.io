@@ -24,10 +24,10 @@ be images with identical functionality in all regions.
 ### 3) Instances Types
 
 General purpose T3, T2, M5, M4
-Compute optimized C5, C4
-Memory optimized X1e, X1, R5, R4, z1d
-Accelerated computing P3, P2, G3, F1
-Storage optimized H1, I3, D2
+Compute optimized C5, C4 (CPU intensive stuff)
+Memory optimized X1e, X1, R5, R4, z1d (Apache spark etc) (X for extreme memory, R for RAM)
+Accelerated computing P3, P2, G3, F1 (ML, Mining, gaming)Think P for pics, G for graphics
+Storage optimized H1, I3, D2 (HDFS Map reduce, NoSql etc) (H for high disk throughput, I for IOPS, D dor density)
 
 T2s are burstable, which means you can accumulate CPU credits when
 your instance is underutilized that can be applied during high-demand
@@ -53,8 +53,12 @@ The Dedicated Host option allows you to actually identify and control the physic
 #### Instance Pricing 
 
 * On-demand model - flexible, can control how much you pay by stopping and starting your instances according to your need. Most expensive per hour.
-* Reserve Instance -for 24/7 instances, for more than a year
-
+* Reserve Instance -for 24/7 instances, 1 year or 3 years
+  * Standard - Can't convert one reserved intance type to another
+  * Convertible - Can switch
+  * Scheduled reserverd instance - EXACTLY WHAT IT SAYS
+* Spot Capacity - Amazons excess that is lent randomly, good for stuff with flexible start-end times
+* Dedicated hosts - Cases that does not support multi tenancy
 one or two reserve instances to cover its normal customer demand but also allow autoscaling to automatically launch on-demand instances during periods of unusually high demand.
 
 #### Instance Lifecycle

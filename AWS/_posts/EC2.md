@@ -84,19 +84,22 @@ Virtualized spaces carved out of larger physical drives.
 
 #### Elastic Block Store Volumes
 
-You can attach as many of these as you like. The AWS SLA guarantess atleast 99.999% availability, but even if the drive does fail, the data has already been duplicated and is revived asap. There are four EBS volumes, two using solid state drive (SSDs) and two using the older spinning hard drives (HDDs). An IOPS means input/output operations per second.
+* You can attach as many of these as you like. The AWS SLA guarantess atleast 99.999% availability, but even if the drive does fail, the data has already been duplicated within its avilability zone
+and is revived asap. 
+* There are four EBS volumes, two using solid state drive (SSDs) and two using the older spinning hard drives (HDDs). An IOPS means input/output operations per second.
 
 * The EBS Root Volumes are where the OS is stored
 * By default, the root EBS volume is deleted on termination
 * EBS Root Volumes of your Default AMIs cannot be encrypted. The additional volumes can be though
 
-### EBS-Provisioned IOPS SSD - For applications requireing intense rates of I/O operations | 32k IOPS/vol |  500MB/s max throughput/vol
-### EBS General-Purpose SSD - For general purpose applications and cheaper than the above | 10k IOPS/vol | 160 MB/s throughput/vol 
-### Throughout-Optimized HDD - Only 500 IOPS/vol, but with 500MB/s max throughput/vol, and much cheaper
-### Cold HDD - For larger volumes of data with infrequent access. 250 IOPS/vol  and 250 MB/s but the cheapest.
+### Provisioned IOPS SSD (API name io1) - For applications requireing intense rates of I/O operations | 32k IOPS/vol |  500MB/s max throughput/vol
+### General-Purpose SSD (API name gp2) - For general purpose applications and cheaper than the above | 10k IOPS/vol | 160 MB/s throughput/vol 
+### Throughout-Optimized Hard Disk Drive (API name st1) - Only 500 IOPS/vol, but with 500MB/s max throughput/vol, and much cheaper
+### Cold HDD (API name sc1) - For larger volumes of data with infrequent access. 250 IOPS/vol  and 250 MB/s but the cheapest.
+### EBS Magnetic - Older generater, for infrequently accessed data
 
-IOPS/vol = IOPS SSD>General Purpose SSD>Throughout Opt HDD>Cold HDD
-Throughput/vol = IOPS SSD>Throughout Opt HDD>Cold HDD>General Purpose SSD
+IOPS/vol = IOPS > General Purpose > Throughout Opt > Cold HDD
+Throughput/vol = IOPS > Throughout Opt  >Cold HDD>General Purpose SSD
 Cost = IOPS SSD>General Purpose SSD>Throughout Opt HDD>Cold HDD
 
 ##### EBS Volume Features
@@ -107,6 +110,10 @@ Cost = IOPS SSD>General Purpose SSD>Throughout Opt HDD>Cold HDD
 * EBS volumes can be encrypted to protect their data while at rest or as it’s sent back and
 forth to the EC2 host instance. 
 * EBS can manage the encryption keys automatically behind the scenes or use keys that you provide through the AWS Key Management Service (KMS).
+* EBS volumes can be snapshot while the instance is running, unless they're root volumes, which is when the instance has to stop
+* You can change the size and volume type on the fly
+* AMIs can be created from both volumes and snapshots
+* Volumes will be in the same availability zone as the EC2 instance
 
 #### Instance Store Volumes
 

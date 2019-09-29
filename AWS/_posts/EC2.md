@@ -11,7 +11,8 @@ CPU power, memory, primary storage, and network performance), and environment.
 * The OS is defined by the Amazon Machine Image (AMI) you choose, and the
 hardware follows the instance type.
 
-### 2) EC2 Amazon Machine Images
+### 2) EC2 Amazon Machine Images (AMI) 
+Basically the virtual machine
 
 An AMI is a template document that contains the OS and application software info to include on the EC2's root data volume. A particular AMI will be available in only a single region—although there will often
 be images with identical functionality in all regions.
@@ -118,6 +119,15 @@ All EC2 devices have unique IP addresses, and will have at least one private IPv
 Running the following curl command from the command line while logged into the instance will return a list of the kinds of data that are available:
 
 $ curl http://169.254.169.254/latest/meta-data/
+
+Webserver
+$ ssh ec2-user@publicipaddress -i key
+$ sudo su :P
+$ yum update -y 
+$ yum install httpd // Intslls apache will turn ec2 instace to webserver
+then anythin in /var/www/html will be accessible via port 80
+$ service httpd start // will start it
+$ chkconfig on // will make sure it starts even in case of a reboot
 
 ### 6) Securing Your EC2 Instance
 

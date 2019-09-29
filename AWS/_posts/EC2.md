@@ -16,6 +16,7 @@ Basically the virtual machine
 
 An AMI is a template document that contains the OS and application software info to include on the EC2's root data volume. A particular AMI will be available in only a single region—although there will often
 be images with identical functionality in all regions.
+You can choose based on region, OS, architecture (32 vs 64) launch permissions or storage (instance vs ebs)
 
 * Amazon Quick Start AMIs - officially supported.
 * AWS Marketplace AMIs - officially supported. and by industry vendors
@@ -116,12 +117,17 @@ forth to the EC2 host instance.
 * Volumes will be in the same availability zone as the EC2 instance
 
 #### Instance Store Volumes
-
-Unlike EBS volumes, instance store volumes are ephemeral. The data is lost when the instances they're attached to are shut down. So why would you choose these over EBS?
+Cannot be added after launch.
+Unlike EBS volumes, instance store volumes are ephemeral. The data is lost when the instances they're attached to are shut down (not rebooted). So why would you choose these over EBS?
 
 * They are SSDs that are physically attached to the server, connected via a fast NVMe interface
 * The price is included in th price of the instance itself
 * Great for models where instances are launched fill short term roles.
+
+#### Encrypted Root Device
+ * EBS volume with the OS is called the root devide.
+ * You couldn't encrypt before, had to create snapshot. Then create a copy of it and encrypt it. And then create AMI from it and spin up a new EC2 with it.
+ * Now you can encrypt right from the start
 
 #### Accessing Your EC2 Instance
 
@@ -153,6 +159,13 @@ To manage your instances connections to the internet. A NAT instance and a NAT g
 
 #### d) Key Pairs
 You’ll need to generate a key pair, save the public key to your EC2 server, and save its private half to your local machine.
+
+### 6.5) Cloudwatch vs CloudTrail;
+
+* Monitors performance, 5 mins by default, can have 1 min granularity
+* CPU, Network, Disk, Status check
+* Can have alarms
+* CloudTrail is more of a cctv, recording api calls and console actions.
 
 ### 7) Other EC2-Related Services
 

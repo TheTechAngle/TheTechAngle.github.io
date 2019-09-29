@@ -24,11 +24,11 @@ be images with identical functionality in all regions.
   
 ### 3) Instances Types
 
-General purpose T3, T2, M5, M4
-Compute optimized C5, C4 (CPU intensive stuff)
-Memory optimized X1e, X1, R5, R4, z1d (Apache spark etc) (X for extreme memory, R for RAM)
-Accelerated computing P3, P2, G3, F1 (ML, Mining, gaming)Think P for pics, G for graphics
-Storage optimized H1, I3, D2 (HDFS Map reduce, NoSql etc) (H for high disk throughput, I for IOPS, D dor density)
+* General purpose T3, T2, M5, M4
+* Compute optimized C5, C4 (CPU intensive stuff)
+* Memory optimized X1e, X1, R5, R4, z1d (Apache spark etc) (X for extreme memory, R for RAM)
+* Accelerated computing P3, P2, G3, F1 (ML, Mining, gaming)Think P for pics, G for graphics
+* Storage optimized H1, I3, D2 (HDFS Map reduce, NoSql etc) (H for high disk throughput, I for IOPS, D dor density)
 
 T2s are burstable, which means you can accumulate CPU credits when
 your instance is underutilized that can be applied during high-demand
@@ -64,7 +64,7 @@ one or two reserve instances to cover its normal customer demand but also allow 
 
 #### Instance Lifecycle
 
-* Terminating - Will shut it down, resources will be reallocated
+* Terminating - Will shut it down, resources will be reallocated. Termination protection is turned off by default
 * Stopping - Will lose nonpersistent public IP address and data on instance volume, but not data on EBS vol
 
 You can also change its instance type to increase or decrease its compute, memory, and stor-
@@ -85,6 +85,10 @@ Virtualized spaces carved out of larger physical drives.
 #### Elastic Block Store Volumes
 
 You can attach as many of these as you like. The AWS SLA guarantess atleast 99.999% availability, but even if the drive does fail, the data has already been duplicated and is revived asap. There are four EBS volumes, two using solid state drive (SSDs) and two using the older spinning hard drives (HDDs). An IOPS means input/output operations per second.
+
+* The EBS Root Volumes are where the OS is stored
+* By default, the root EBS volume is deleted on termination
+* EBS Root Volumes of your Default AMIs cannot be encrypted. The additional volumes can be though
 
 ### EBS-Provisioned IOPS SSD - For applications requireing intense rates of I/O operations | 32k IOPS/vol |  500MB/s max throughput/vol
 ### EBS General-Purpose SSD - For general purpose applications and cheaper than the above | 10k IOPS/vol | 160 MB/s throughput/vol 

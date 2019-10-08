@@ -49,4 +49,5 @@ rule, as they use regular access keys rather than X.509 certificates.
 * Ec2 -> actions -> attach IAM role -> choose the role
 * JSON form of the access policy will be available on aws
 * No credentials stored on the ec2 instance
+* ROLES ARE UNIVERSAL
 

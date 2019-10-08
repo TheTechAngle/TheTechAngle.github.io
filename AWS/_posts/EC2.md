@@ -14,8 +14,10 @@ hardware follows the instance type.
 ### 2) EC2 Amazon Machine Images (AMI) 
 Basically the virtual machine
 
-An AMI is a template document that contains the OS and application software info to include on the EC2's root data volume. A particular AMI will be available in only a single region—although there will often
+* An AMI is a template document that contains the OS and application software info to include on the EC2's root data volume.
+* A particular AMI will be available in only a single region—although there will often
 be images with identical functionality in all regions.
+* You can use AMIS to move an Ec2 volume from one AZ to another
 You can choose based on region, OS, architecture (32 vs 64) launch permissions or storage (instance vs ebs)
 
 * Amazon Quick Start AMIs - officially supported.
@@ -59,7 +61,7 @@ The Dedicated Host option allows you to actually identify and control the physic
   * Standard - Can't convert one reserved intance type to another
   * Convertible - Can switch
   * Scheduled reserverd instance - EXACTLY WHAT IT SAYS
-* Spot Capacity - Amazons excess that is lent randomly, good for stuff with flexible start-end times
+* Spot Capacity - Amazons excess that is lent randomly, good for stuff with flexible start-end times. Have to pay by the hour unless Amazon ends tenancy
 * Dedicated hosts - Cases that does not support multi tenancy
 one or two reserve instances to cover its normal customer demand but also allow autoscaling to automatically launch on-demand instances during periods of unusually high demand.
 
@@ -88,6 +90,7 @@ Virtualized spaces carved out of larger physical drives.
 * You can attach as many of these as you like. The AWS SLA guarantess atleast 99.999% availability, but even if the drive does fail, the data has already been duplicated within its avilability zone
 and is revived asap. 
 * There are four EBS volumes, two using solid state drive (SSDs) and two using the older spinning hard drives (HDDs). An IOPS means input/output operations per second.
+* Same AZ as EC2 instance
 
 * The EBS Root Volumes are where the OS is stored
 * By default, the root EBS volume is deleted on termination
@@ -106,7 +109,8 @@ Cost = IOPS SSD>General Purpose SSD>Throughout Opt HDD>Cold HDD
 ##### EBS Volume Features
 
 * All EBS volumes can be copied by creating a snapshot. 
-* Existing snapshots can be used to generate other volumes 
+* Volumes exist on EBS, snapshoys exist on S3. Only blocks that have changes since your last snapshot are moved to S3 ie they are incremental
+* Existing snapshots can be used to generate other volumes
 * You can also generate an AMI image directly from a running instance-attached EBS volume
 * EBS volumes can be encrypted to protect their data while at rest or as it’s sent back and
 forth to the EC2 host instance. 
@@ -149,7 +153,9 @@ $ chkconfig on // will make sure it starts even in case of a reboot
 ### 6) Securing Your EC2 Instance
 
 #### a) Security Group 
-Plays the role of a firewall, will deny all incoming traffic by default.
+* Plays the role of a firewall, will deny all incoming traffic by default, allows all outbound traffic.
+* Changes to security group takes place immediately
+* EC2-security group -> many to many relationship
 
 #### b) IAM Roles
 When a particular role is assigned to a user or resource, they’ll gain access to whichever resources were included in the role policies. You can also assign an IAM role to an EC2 instance.
@@ -191,7 +197,48 @@ Lambda allows you to instantly perform almost any operation on demand at almost 
 * Autoscaling will react to preset performance thresholds by automatically increasing or decreasing the number of EC2 instances you have running to match demand.
 
 
-### AWS Console
+### 8) AWS Console
 * aws configure
 * aws <service> ls
 * cd .aws (for credentials
+  
+### 9) Bash Scripting
+
+* In configure details -> Advanced options
+* #!/bin/bash -> path to the interpreter -> takes commands and runs them
+* you can put in any command you want in here, each on a new line
+* Make sure the EC2 has admin access
+
+### 10) Instance metadata
+
+* curl http://169.254.169.254/latest/user-data/ -> you can see what was run while bootstrap
+* curl http://169.254.169.254/latest/meta-data/ -> all sorts of stuff displayed, can view each individual thing like as below 
+* curl http://169.254.169.254/latest/meta-data/local-ipv4/ -> for the ipv4 
+
+### 11) Amazon Elastic File System (Amazon EFS)
+
+* Elastic and easily scalable storage capacity - so that your applications have the storage they need, when they need it
+* You can share it across two EC2 instances
+* Has life cycle management too
+* sudo yum install -y amazon-utils-efs -> to install it
+* sudo mount -t efs tls fs-blahblah filepath (filepath indicates what its gonna store)
+* Communicate via NFS (port 2040), so make sure to allow that on the EC2 security group
+* You only pay for what you use unlike EBS
+* Scale up to petabytes
+* Can support thousands of concurrent connections
+* data stored across multiple AZs in a regions
+* READ AFTER WRITE consistency
+
+### 12) EC2 Placement Groups
+
+* Just a way of placing your instances. Name you give for the group must be unique in your account
+* Only certain instances can use this grouping (compute optimized, GPU, Memory optimized, Storage optimized)
+* Cant merge groups
+* cant move an already existing instance to a group. Can create an AMI of it and launch a new one from the AMI into he group
+* Clustered - grouping within a single AZ for low latency, and/or high throughput. CANNOT span multipe AZs
+* Spread - each on distict isolated hardware, for apps that have small number of critical instances 
+* Partitioned - each group has logical 'partitions' which has its own set of racks. No two partitions share the same rack, so as to isolate hardware failure - use case HDFS, cassandra clusters
+
+
+
+

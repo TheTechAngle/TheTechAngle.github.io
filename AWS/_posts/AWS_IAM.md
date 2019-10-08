@@ -42,3 +42,11 @@ rule, as they use regular access keys rather than X.509 certificates.
 * aws iam get-access-key-last-used --access-key-id ABCDEFGHIJKLMNOP can be used to determine whether any applications are still using an old key.
 * Users assigned Access key id - username, secret access key - password for programmatic access
 * New users have NO permissions when created
+
+### Using IAM Roles with EC2
+
+* Create role -> choose service that will be using it (EC2) -> administrative access
+* Ec2 -> actions -> attach IAM role -> choose the role
+* JSON form of the access policy will be available on aws
+* No credentials stored on the ec2 instance
+

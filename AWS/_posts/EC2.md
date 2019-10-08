@@ -189,3 +189,9 @@ Lambda allows you to instantly perform almost any operation on demand at almost 
 #### f) Elastic Load Balancing and Auto Scaling
 * A load balancer directs external user requests between multiple EC2 instances to more efficiently distribute server resources and improve user experience. 
 * Autoscaling will react to preset performance thresholds by automatically increasing or decreasing the number of EC2 instances you have running to match demand.
+
+
+### AWS Console
+* aws configure
+* aws <service> ls
+* cd .aws (for credentials

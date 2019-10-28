@@ -12,3 +12,10 @@ They have their own DNS name, no IP address. READ FAQs
 X-Forwarded-For header = to get the IP address of the actual client IP address 
 
 Target Group - Can create target groups within the service to group instances
+
+What are sticky sessions?- allow yoou to bind a users session to a particular ec2 instance so that sll requests from the user are sent to the same instance
+classic LBs do this, so do the Application LBs, but the traffic is sent at the target group level
+
+Cross Zone LB
+ Traffic is sent to Route53. W/O Cross Xone LB, ELBs cant send traffic to other regions. With Cross Zone LB, the ELB can send traffic to other regions as well.
+ 

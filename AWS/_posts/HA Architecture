@@ -1,0 +1,14 @@
+High Available Architecture
+Load balancers
+
+There are three type
+1) Application LB - Best suited for balancing HTTP adn HTTPS traffic. Application aware, adn can create advanced request routing
+2) Network LB - Operates at the Netwrok level, for load balancing TCP traffic
+3) Classic LB - Legacy ELBs. You can load balance HTTP/S applications and use L7 specific features. You can also use strict Layer 4 load balancing for applications that rely purely on TCP protocol
+
+They have their own DNS name, no IP address. READ FAQs
+504 Error - Server has failed, not ELB
+
+X-Forwarded-For header = to get the IP address of the actual client IP address 
+
+Target Group - Can create target groups within the service to group instances

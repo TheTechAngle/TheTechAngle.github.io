@@ -21,3 +21,14 @@ Cross Zone LB
  
 Path Patterns
 Route based on paths. Can send all requests for images to one target zone/ ec2 , and everything to another
+
+
+Auto-Scaling Group
+* Requires a Launch Configuration, where you can set min/max number of instances, and when you'd want more instance. 
+* The ASG is then set by using the Launch Configuration
+* You can also add a configuration and set the Load Balancer target group, so that the instances are placed behind the LB as they are spun up
+
+Highly Available Architecture
+* EVERYTHING FAILS
+* Difference between Multi-AZ (disaster recovery) and Read Replicas(performance) for RDS
+* Scaling out (with Autoscaling groups) v/s Scaling up (increasing the RAM/CPU instance type)

@@ -49,11 +49,11 @@ the Amazon S3 encryption client.
 * S3 Infrequent Access (S3 IA) - data that is accessed less frequently, but rapid access when needed. Lesser cost
 * S3 One Zone-Infrequent Access (S3 One Zone-IA), stores data in only a single availability zone
 * S3 Intelligent Tiering - moves it around the other tiers based on what its learnt about your access with ML
-* Reduced Redundancy Storage (RRS) is rated at only 99.99% durability (because it’s replicated across fewer servers than other classes).
+* Reduced Redundancy Storage (RRS) is rated at only 99.99% durability (because it’s replicated across fewer servers than other classes). AWS deprecating it
 * S3 Standard == S3 One Zone > RRS
 
 ### 2) Availability - Can you connect?
-*S3 Standard (99.99)* == Reduced Redundancy > S3 Standard IA (99.9) > S3 One Zone (99.5) % in a year
+*S3 Standard and Glacier (99.99)* == Reduced Redundancy > S3 Standard IA (99.9) > S3 One Zone (99.5) % in a year
 
 ### 3) Eventually Consistent Data
 * Because there isn’t the risk of corruption, S3 provides read-after-write consistency for
@@ -113,6 +113,7 @@ that specifies your S3 bucket as its origin.
 
 * Charged for storage, data retrieval operations like GET and PUT and lifecycle transition requests
 * https://aws.amazon.com/s3/pricing/.
+* S3 > S3 IA > S3 IA One Zone > Glacier
 * Cross Region Replication - 
 * Amazon S3 transfer Acceleration - fast and easy transfers(uploads and downloads) using edge locations
 

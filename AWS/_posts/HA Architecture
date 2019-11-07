@@ -20,7 +20,7 @@ Target Group - Can create target groups within the service to group instances
 classic LBs do this, so do the Application LBs, but the traffic is sent at the target group level
 
 * Cross Zone LB
- Traffic is sent to Route53. W/O Cross Xone LB, ELBs cant send traffic to other regions. With Cross Zone LB, the ELB can send traffic to other regions as well.
+ Traffic is sent to Route53. W/O Cross Xone LB, ELBs cant send traffic to other zones. With Cross Zone LB, the ELB can send traffic to other zones as well.
  
 * Path Patterns
 Route based on paths. Can send all requests for images to one target zone/ ec2 , and everything to another

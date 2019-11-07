@@ -3,7 +3,7 @@ Load balancers
 
 There are three type
 1) Application LB - Best suited for balancing HTTP adn HTTPS traffic. Application aware, adn can create advanced request routing
-2) Network LB - Operates at the Netwrok level, for load balancing TCP traffic
+2) Network LB - Operates at the Netwrok level, for load balancing TCP traffic. designed for high performance traffic that is not conventional Web traffic
 3) Classic LB - Legacy ELBs, cost efficient one. You can load balance HTTP/S applications and use L7 specific features. You can also use strict Layer 4 load balancing for applications that rely purely on TCP protocol
 
 Instances monitored by ELBs are either 'InService' or 'OutOfService'

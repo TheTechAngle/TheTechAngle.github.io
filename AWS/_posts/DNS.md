@@ -46,9 +46,15 @@ The following Routing Policies are avialble with Route53:
 * Create recordset within hosted zone. Amazon gives 4 different top level domain names jic. In the record name, you can add your ip address
 
 Simple Routing - One record with multiple IP address, returns all values BUT in random order
+
 Weighted Routing - You can choose the percentage of traffic to be sent to different zones. You create a record set per IP, and set its weight. For ex, if 20 and 30, first one gets 40%, second gets 60%
+
 Latency-based Routing - Route your traffic based on the lowest network latency. You create a latency resource record set for the Amaxon EC2 or ELB resource in each region that hosts your website. 
+
 Failover Routing - When we lose our active server, fails over to the passive one.
+
 Geolocation Routing - Based on the geographic location of your users
+
 Geoproximity Routing - Based on the geographic location of your users as well as your resources. You can use a 'bias' to choose how much traffic. You must use Route53 TrafficFlows
+
 Multivalue Answer Routing - Allows yous to configure multiple values in response to DNS queries. So its like SImple Routing BUT it can perform health checks AND You create separate records for each

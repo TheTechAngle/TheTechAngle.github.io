@@ -1,4 +1,9 @@
+### CloudFront
+Edge Locations are endpoints for AWS which are used for caching content. Typically this consists of CLoudFront, Amazon's Content Delivery Network (CDN)
 
+There are many more Edge Locations than Regions. Currently there are over 150 Edge Locations.
+
+A region is a physical location with two or more AZs, an AZ is baiscally one more datacentre.
 
 ### Amazon SQS
   

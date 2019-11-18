@@ -57,6 +57,8 @@ rule, as they use regular access keys rather than X.509 certificates.
 
 -----
 FAQ
-There are three options  which can be used to secure access to files stored in S3. CloudFront Signed URLs and CloudFront Signed Cookies are different ways to ensure that users attempting access to files in an S3 bucket can be authorised.
-An Origin Access Identity on the other hand, is a virtual user identity that is used to give the CloudFront distribution permission to fetch a private object from an S3 bucket. 
+* There are three options  which can be used to secure access to files stored in S3. CloudFront Signed URLs and CloudFront Signed Cookies are different ways to ensure that users attempting access to files in an S3 bucket can be authorised.
+* An Origin Access Identity on the other hand, is a virtual user identity that is used to give the CloudFront distribution permission to fetch a private object from an S3 bucket. 
+
+* Using SAML (Security Assertion Markup Language 2.0), you can give your federated users single sign-on (SSO) access to the AWS Management Console.
 

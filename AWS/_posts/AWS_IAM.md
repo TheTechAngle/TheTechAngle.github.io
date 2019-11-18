@@ -42,7 +42,8 @@ rule, as they use regular access keys rather than X.509 certificates.
 * Deactivate unused keys
 * Key rotation can be ensured in the password policy of IAM account, where keys are replaces every x number of days
 * aws iam get-access-key-last-used --access-key-id ABCDEFGHIJKLMNOP can be used to determine whether any applications are still using an old key.
-* Users assigned Access key id - username, secret access key - password for programmatic access
+* Users assigned Access key id(username), secret access key(password) for programmatic access
+* To access the console you use an account and password combination. To access AWS programmatically you use a Key and Secret Key combination
 * New users have NO permissions when created
 
 ### Using IAM Roles with EC2

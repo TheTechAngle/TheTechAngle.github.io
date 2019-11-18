@@ -2,6 +2,10 @@
 
 S3 is object oriented storage, and an S3 bucket and its contents exist only within a region, but the name must be GLOBALLY unique.
 
+* By default, customers can provision up to 100 buckets per AWS account. However, you can increase your Amazon S3 bucket limit by visiting AWS Service Limits.Jan 27, 2012
+
+* Until 2018 there was a hard limit on S3 puts of 100 PUTs per second. To achieve this care needed to be taken with the structure of the name Key to ensure parallel processing. As of July 2018 the limit was raised to 3500 and the need for the Key design was basically eliminated.
+
 * Block-level storage - data on a raw physical storage device is divided into individual blocks whose use is managed by a file system. NTFS is a common file system used by Windows, while Linux might use Btrfs or ext4.
 * Object storage (S3) - data is stored more on a flat surface and avoids some of the OS-related complications of block storage, allowing anyone easy access to the storage capacity. 
 

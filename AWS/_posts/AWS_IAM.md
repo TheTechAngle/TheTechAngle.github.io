@@ -6,6 +6,8 @@ Anything done in IAM is done in region 'Global'
 ## 1) IAM Identities
 * Every AWS account has a default root user, with full rights to everything in the account
 * Hence, root is the point of weakness
+* New user - default level of access a newly created IAM User is granted is no access to anything
+* Power User Access allows access to all AWS services except the management of groups and users within IAM.
 
 ### IAM Policies
 * A policy might, for instance, allow (the effect) the creation of buckets (the action) within
@@ -50,4 +52,10 @@ rule, as they use regular access keys rather than X.509 certificates.
 * JSON form of the access policy will be available on aws
 * No credentials stored on the ec2 instance
 * ROLES ARE UNIVERSAL
+
+
+-----
+FAQ
+There are three options  which can be used to secure access to files stored in S3. CloudFront Signed URLs and CloudFront Signed Cookies are different ways to ensure that users attempting access to files in an S3 bucket can be authorised.
+An Origin Access Identity on the other hand, is a virtual user identity that is used to give the CloudFront distribution permission to fetch a private object from an S3 bucket. 
 

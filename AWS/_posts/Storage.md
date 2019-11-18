@@ -130,7 +130,7 @@ Network File System (NFS) mounts on EC2 instances or from your on-premises serve
 through AWS Direct Connect connections. Enables secure,low-latency, and durable file sharing among multiple instances.
 
 #### 2) AWS Storage Gateway
-Local devices can connect to the appliance as though it’s a physical backup device like a tape drive, while the data itself is saved to AWS platforms
+Physical or Virtual Local devices can connect to the appliance as though it’s a physical backup device like a tape drive, while the data itself is saved to AWS platforms
 
 * File Gateway - for flat files to be stored directly on S3
 * Volume Gateway - Stored Volumes - Entire dataset stored on site and asynchronously backed up to S3

@@ -107,12 +107,14 @@ that specifies your S3 bucket as its origin.
 * Default archive encryption, S3's to be enabled
 * Machine generated Ids, S3's are human readable
 * VERY long retrieval time, meant for unusual in frequent access
-* Deep archive can take upto 12 hours
+* Choose S3 Glacier when some of your archived data is needed in as little as 1-5 minutes using Expedited retrievals. 
+* S3 Glacier Deep Archive, in contrast, is designed for colder data that is very unlikely to be accessed, but still requires long-term, durable storage.Deep archive can take upto 12 hours
 
 ## (F) Storage Pricing
 
-* Charged for storage, data retrieval operations like GET and PUT and lifecycle transition requests
+* Charged for storage, versions, data retrieval operations like GET and PUT and lifecycle transition requests
 * https://aws.amazon.com/s3/pricing/.
+* Data transfers within a region with a COPY request only (even with an EC2) are free, across regions are charged. 
 * S3 > S3 IA > S3 IA One Zone > Glacier
 * Cross Region Replication - 
 * Amazon S3 transfer Acceleration - fast and easy transfers(uploads and downloads) using edge locations
@@ -142,6 +144,8 @@ Snowball edge offers both
 * Regions must be unique
 * Existing files in bucket not replicted automatically
 * Delete markers and deleting versions not replicated
+* Amazon S3 Replication (CRR and SRR) is configured at the S3 bucket level, a shared prefix level, or an object level using S3 object tags.
+* With S3 Replication (CRR and SRR), you can establish replication rules to make copies of your objects into another storage class, in the same or a different region. Lifecycle actions are not replicated, and if you want the same lifecycle configuration applied to both source and destination buckets, enable the same lifecycle configuration on both. 
 
 ## I) S3 Transfer Acceleration and CloudFront
 * edge locations to accelerate uploads and downloads
@@ -153,4 +157,11 @@ Snowball edge offers both
 
 
 READ S3 FAQS BEFORE TAKING THE EXAM
-
+* Amazon Macie is an AI-powered security service that helps you prevent data loss by automatically discovering, classifying, and protecting sensitive data stored in Amazon S3
+* You can have a bucket that has different objects stored in S3 Standard, S3 Intelligent-Tiering, S3 Standard-IA, and S3 One Zone-IA.
+* Amazon S3 allows customers to run sophisticated queries against data stored without the need to move data into a separate analytics platform
+* S3 offers multiple query in place options, including S3 Select, Amazon Athena (analytics heavy), and Amazon Redshift Spectrum (data size heavy), allowing you to choose one that best fits your use case.
+* Amazon S3 event notifications can be sent in response to actions in Amazon S3 like PUTs, POSTs, COPYs, or DELETEs. Notification messages can be sent through either Amazon SNS, Amazon SQS, or directly to AWS Lambda.
+* S3 Transfer Acceleration a better choice than CloudFront if a higher throughput is desired (for >1GB uploads)
+* Storage Class Analysis, an S3 feature, you can analyze storage access patterns and transition the right data to the right storage class. 
+* Amazon S3 Object Lock is a new Amazon S3 feature that blocks object version deletion during a customer-defined retention period so that you can enforce retention policies as an added layer of data protection or for regulatory compliance

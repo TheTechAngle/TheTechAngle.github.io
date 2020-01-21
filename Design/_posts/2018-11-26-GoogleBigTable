@@ -11,6 +11,16 @@ Datamodel
 "A Bigtable is a sparse, distributed, persistent multidimensional sorted map". It is indexed by a row key, a column key and a timestamp, and the value stored in stored as an 
 array of bytes. As you can tell, this will model accounts for much of its storage flexibility in terms of data types and sizes.
 
-each update to a row is atomic, regardless of the number of columns. Rows are stored lexicographically, and can be partitioned accordingly,
+Row
+Each update to a row is atomic, regardless of the number of columns. Rows are stored lexicographically, and can be partitioned accordingly,
 based on how the client wants to distribute data. Each unit of data so partitioned is called a tablet. So far, so good, we've read similar models 
 in dynamo and cassandra.
+
+Column Families
+Column keys are grouped into sets called column families, which form the basic unit of access control. All data
+stored in a column family is usually of the same type
+
+Timestamp
+Each cell in a Bigtable can contain multiple versions of the same data; these versions are indexed by timestamp.
+Bigtable timestamps are 64-bit integers. Applications that need to avoid collisions
+must generate unique timestamps themselves.

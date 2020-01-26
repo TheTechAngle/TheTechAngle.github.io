@@ -2,9 +2,8 @@
 layout: post
 title: Google's Bigtable Design Condensed 
 ---
-Source: https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf
 
-The first thing that jumps out at you when you read the paper is bigtable's flexibility in terms of the data size and latency requirements it supports.
+The first thing that jumps out at you when you read [the paper](https://github.com/TheTechAngle/TheTechAngle.github.io/edit/master/Design/_posts/2018-11-26-GoogleBigTable.md) is bigtable's flexibility in terms of the data size and latency requirements it supports.
 It handles data from web indexing, Google Finance and Google Earth, from urls to images. (And that Orkut was a Google product, who knew)
 
 ### Datamodel

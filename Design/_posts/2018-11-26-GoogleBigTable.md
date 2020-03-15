@@ -45,7 +45,7 @@ the face of failure.
 Chubby provides a namespace that consists of directories and small files. Each directory or
 file can be used as a lock, and reads and writes to a file are atomic.
 
-I read up on Chubby [here|https://medium.com/coinmonks/chubby-a-centralized-lock-service-for-distributed-applications-390571273052]
+I read up on Chubby [here](https://medium.com/coinmonks/chubby-a-centralized-lock-service-for-distributed-applications-390571273052)
 It was a really interesting read, about why the decision was made to use a locking system like Chubby over
 a consensus based set up like Paxos.
 

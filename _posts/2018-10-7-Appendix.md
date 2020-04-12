@@ -15,6 +15,10 @@ The availability of the system is essentially the uptime of the system, i.e. whe
 ### BASE
 Basically Available, Soft state eventual consistency. NoSQL DBs
 
+### Bloomfilter
+Space efficient probablistic data stores
+Checks if the element is a member of a set. Can have false positive but never false negatives.
+
 ### Caching
 Cache storage to speend up access
 1) Every node does its own caching
@@ -37,11 +41,21 @@ When transacations can take place as if in parallel, but in reality might take p
 Many times, data will be replicated across nodes. The consistency of a system is a way of stating how quickly and accurately the data is updated across the nodes such that it is consistent across all the nodes.See also strong consistency and eventual consistency.
 See [here](https://mwhittaker.github.io/consistency_in_distributed_systems/1_baseball.html) for a detailed explanation.
 
+### Content Delivery Network
+Geographically distributed servers that store content. Allows client to contact the server closest to it.
+
+### Count Min Sketch 
+Space efficient probablistic data stores
+Counts frequency of events, but with som error rate.
+
 ### Cross origin resource sharing 
 Allows restricted resource on a web page to be requested from another domain outside the domain from which th efirst resource was served. Browser makes an HTTP OPTIONS (GET PUT POST) call for a url, and the server retursn a response saying "These other domains are approved to GET this url"
 
 ### Durability
 The durability of a system guarantees that data that is committed persists, or is saved permanently.
+
+### Edge Caching
+Edge caching refers to the use of caching servers to store content closer to end users. For instance, if you visit a popular Web site and download some static content that gets cached, each subsequent user will get served that content directly from the caching server until it expires
 
 ### Eventual Consistency
 A system display eventual consistency when nodes evetually update each other with changes, before which it is possible that clients may see inconsistencies in the data. For example, client C may update system A by changing the value of x from 6 to 7. Since A doesn't immediately update the other nodes about this change, if C asks for the value of x again and the request is routed to system B, it will respond with the old value of x ie 6. If C repeats this request after some time during which the update takes place, it will get the new value of x.

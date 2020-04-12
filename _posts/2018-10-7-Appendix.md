@@ -3,11 +3,26 @@ layout: post
 title: Appendix
 ---
 
+### ACID 
+Atomicity, Consistency, Isolation and Durability. Relational DBs
+
 ### Atomicity 
 A transaction is said to be atomic if it is indivisible, or made up of a series of operations such that either they all take place or none do.
 
 ### Availabilty 
 The availability of the system is essentially the uptime of the system, i.e. when it is running and operational. 
+
+### BASE
+Basically Available, Soft state eventual consistency. NoSQL DBs
+
+### Caching
+Cache storage to speend up access
+1) Every node does its own caching
+2) Distributed cache, shared between different nodes
+
+* Cache is not the source of trueth
+* Cache data has to be small -> stored in memory
+* Eviction policies example LRU
 
 ### CAP Theorem 
 Consistency | Availabilty | Partition Tolerance
@@ -37,6 +52,18 @@ Organizing data for fast retrieval
 ### Lazy space allocation
 Rather than allocating space for the file content as soon as it is created, the data is written onto a buffer first. This improves the chance that the data is written in a contiguous group of blocks, reducing fragmentation problems and increasing performance. 
 
+### Locking
+Optimistic vs Pessimistic Locking.
+Optimistic Locking - getting a lock only at time of transaction
+Pessimistic Locking - getting all the locks beforehand and then commiting
+ 
+### NoSql
+Scales better and has higher availabilty but no ACID properties. Types:
+1) Key Value
+2) Wide Column - 1 row can have many different types of Databases
+3) Document based databases
+4) graph based
+
 ### Partition Tolerance
 When there's a partition between two hosts. Always happens in real life.
 
@@ -46,6 +73,9 @@ A web browser permits scripts contained in a first web page to access data in a 
 ### Scaling
 Vertical Scaling - Add more memory/CPU power. Expensive and limited
 Horizontal Scaling - Add more hosts. But have to worry about distribution concepts.
+
+### Sharding
+Distribution of data over hosts, for example usign consistent hashing
 
 ### Serializability 
 A transaction schedule is serializable if there exists a schedule where the transactions are executed in some sequence with the same outcome.

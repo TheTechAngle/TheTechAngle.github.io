@@ -9,6 +9,12 @@ A transaction is said to be atomic if it is indivisible, or made up of a series 
 ### Availabilty 
 The availability of the system is essentially the uptime of the system, i.e. when it is running and operational. 
 
+### CAP Theorem 
+Consistency | Availabilty | Partition Tolerance
+Can't have all three. Partition Tolerance always happens, so essentially choosing between consistency & availabilty.
+Traditional DBs rely on ACID, so Consistency wins over Availabilty.
+NoSql DBs can choose Availabilty over Consistency.
+
 ### Concurrent Transactions
 When transacations can take place as if in parallel, but in reality might take place out of order or in partial order, without affecting the final outcome.
 
@@ -31,8 +37,15 @@ Organizing data for fast retrieval
 ### Lazy space allocation
 Rather than allocating space for the file content as soon as it is created, the data is written onto a buffer first. This improves the chance that the data is written in a contiguous group of blocks, reducing fragmentation problems and increasing performance. 
 
+### Partition Tolerance
+When there's a partition between two hosts. Always happens in real life.
+
 ### Same origin policy 
 A web browser permits scripts contained in a first web page to access data in a second web page only if bothe web pages have the same origin.to prevent Cross-Site Scripting (XSS) attacks.
+
+### Scaling
+Vertical Scaling - Add more memory/CPU power. Expensive and limited
+Horizontal Scaling - Add more hosts. But have to worry about distribution concepts.
 
 ### Serializability 
 A transaction schedule is serializable if there exists a schedule where the transactions are executed in some sequence with the same outcome.

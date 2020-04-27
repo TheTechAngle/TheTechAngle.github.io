@@ -104,4 +104,4 @@ in the other partition. To prevent this,the number of masters must never be less
 total number of nodes, or the number of votes need for electing a master must be at least one more than half .
 
 ### Strong Consistency
-A system displays strong consistency when it behaves as if it is running on one node, i.e. when all the node immediately update each other for any change such that the client never sees any inconsistencies in the data.
+A system displays strong consistency when it behaves as if it is running on one node, i.e. when all the node immediately update each other for any change such that the client never sees any inconsistencies in the data. So any read after a write will always see the result of that write.

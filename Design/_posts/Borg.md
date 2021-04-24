@@ -14,3 +14,28 @@ highly-available file in Chubby
 * Almost every task run under Borg contains a built-in HTTP server that publishes information about the health of the task and thousands of performance metrics
 * A service called Sigma provides a web-based user interface (UI) through which a user can examine the state of all
 their jobs
+
+## Borg Architecture
+
+Borgmaster
+* The main Borgmaster process handles client RPCs that either mutate state (e.g., create job) or provide read-only access to data (e.g., lookup job). It also manages state machines for all of the objects in the system (machines, tasks, allocs, etc.), communicates with the Borglets, and offers a web UI as a backup to Sigma.
+* replicated 5 times, each replica maintains an inmemory copy of most of the state of the cell, and this state is also recorded in a highly-available, distributed, Paxos-based store 
+* A master is elected (using Paxos) when the cell is brought up and whenever the elected master fails; it acquires a Chubby lock so other systems can find it.
+* A high-fidelity Borgmaster simulator called Fauxmaster contains a complete copy of the production Borgmaster code and we use it to debug failures
+
+Scheduling 
+* the Borgmaster records a job persistently in the Paxos store and adds the job’s tasks to the pending queue
+* The scan proceeds from high to low priority, modulated by a round-robin scheme within a priority to ensure fairness across users and avoid head-of-line blocking behind a large job
+* In feasibility checking, the scheduler finds a set of machines that meet the task’s constraints and also have enough “available” resources – which includes resources assigned to lower-priority tasks that can be evicted.
+* Borg originally used a variant of E-PVM [4] for scoring,  E-PVM ends up spreading load across all the machines, leaving headroom for load spikes – but at the expense of increased fragmentation (worst-fit)
+*  “best fit”, which tries to fill machines as tightly as possible. This leaves some machines empty of user jobs  but the tight packing penalizes any mis-estimations in resource requirements
+* Current scoring model is a hybrid one that tries to reduce the amount of stranded resources – ones that cannot be used because another resource on the machine is fully allocated.
+* We add the preempted tasks to the scheduler’s pending queue, rather than migrate or hibernate them
+* To reduce task startup time, the scheduler prefers to assign tasks to machines that already have the necessary packages
+installed: most packages are immutable and so can be shared and cached. (This is the only form of data locality supported by the Borg scheduler.)
+* In addition, Borg distributes packages to machines in parallel using treeand torrent-like protocols.
+
+Borglet
+* The Borglet is a local Borg agent that is present on every machine in a cell. It starts and stops tasks; restarts them if they fail; manages local resources by manipulating OS kernel settings; rolls over debug logs; and reports the state of the machine to the Borgmaster and other monitoring systems
+
+

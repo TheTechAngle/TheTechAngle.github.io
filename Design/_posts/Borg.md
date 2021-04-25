@@ -37,5 +37,10 @@ installed: most packages are immutable and so can be shared and cached. (This is
 
 Borglet
 * The Borglet is a local Borg agent that is present on every machine in a cell. It starts and stops tasks; restarts them if they fail; manages local resources by manipulating OS kernel settings; rolls over debug logs; and reports the state of the machine to the Borgmaster and other monitoring systems
+* For performance scalability, each Borgmaster replica runs a stateless link shard to handle the communication with some of the Borglets
+* the Borglet always reports its full state, but the link shards aggregate and compress this information by reporting only differences to the state machines, to reduce the update load at the elected master
 
 
+Scalability
+* A single Borgmaster can manage many thousands of machines in a cell, and several cells have arrival rates above 10 000 tasks per minute. A busy Borgmaster uses 10–14 CPU cores and up to 50 GiB RAM. We use several techniques to achieve this scale.
+* To handle larger cells, we split the scheduler into a separate process so it could operate in parallel with the other Borgmaster functions

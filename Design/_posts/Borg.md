@@ -44,3 +44,8 @@ Borglet
 Scalability
 * A single Borgmaster can manage many thousands of machines in a cell, and several cells have arrival rates above 10 000 tasks per minute. A busy Borgmaster uses 10–14 CPU cores and up to 50 GiB RAM. We use several techniques to achieve this scale.
 * To handle larger cells, we split the scheduler into a separate process so it could operate in parallel with the other Borgmaster functions
+* A scheduler replica operates on a cached copy of the cell state. It repeatedly: retrieves state changes from the elected master (including both assigned and pending work); updates its local copy; does a scheduling pass to assign tasks; and informs the elected master of those assignments
+* Several things that make the Borg scheduler more flexible
+  * Score Caching:- Caching the score given to a machine for its feasibility. Cached until something on the machine or task changes i.e., a task terminates, a task requirements change
+  * Equivalence:- Borg only does feasibility and scoring for one task per equivalence class – a group of tasks with identical requirements.
+  * Relaxed randomization:-  It is wasteful to calculate feasibility and scores for all the machines in a large cell, so the scheduler examines machines in a random order until it has found “enough” feasible machines to score, and then selects the best within that set. **Scheduling a cell’s entire workload from scratch typically took a few hundred seconds, but did not finish after more than 3 days when this techniques were disabled**

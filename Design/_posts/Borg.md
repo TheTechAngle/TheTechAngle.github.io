@@ -41,7 +41,7 @@ Borglet
 * the Borglet always reports its full state, but the link shards aggregate and compress this information by reporting only differences to the state machines, to reduce the update load at the elected master
 
 
-Scalability
+## Scalability
 * A single Borgmaster can manage many thousands of machines in a cell, and several cells have arrival rates above 10 000 tasks per minute. A busy Borgmaster uses 10–14 CPU cores and up to 50 GiB RAM. We use several techniques to achieve this scale.
 * To handle larger cells, we split the scheduler into a separate process so it could operate in parallel with the other Borgmaster functions
 * A scheduler replica operates on a cached copy of the cell state. It repeatedly: retrieves state changes from the elected master (including both assigned and pending work); updates its local copy; does a scheduling pass to assign tasks; and informs the elected master of those assignments
@@ -51,10 +51,24 @@ Scalability
   * Relaxed randomization:-  It is wasteful to calculate feasibility and scores for all the machines in a large cell, so the scheduler examines machines in a random order until it has found “enough” feasible machines to score, and then selects the best within that set. **Scheduling a cell’s entire workload from scratch typically took a few hundred seconds, but did not finish after more than 3 days when this techniques were disabled**
 
 
-Availability
+## Availability
+
 * Applications that run on Borg are expected to handle failures. Even so, we try to mitigate the impact of these events
   * automatically reschedules evicted tasks
   * spread tasks of a job across failure domains
   * YOu can read the rest in the paper
 * A key design feature in Borg is that already-running tasks continue to run even if the Borgmaster or a task’s Borglet goes down
 * Borgmaster uses a combination of techniques that enable it to achieve 99.99% availability in practice: replication for machine failures; admission control to avoid overload; and deploying instances using simple, low-level tools to minimize external dependencies. Each cell is independent of the others to minimize the chance of correlated operator errors and failure propagation. These goals, not scalability limitations, are the primary argument against larger cells.
+
+## Utilization 
+
+Evaluation methodology
+* Cell Compaction: cell compaction: given a workload, we found out how small a cell it could be fitted into by removing machines until the workload no longer fitted
+* To maintain machine heterogeneity in the compacted cellwe randomly selected machines to remove. To maintain workload heterogeneity, we kept it all, except for server and storage tasks tied to a particular machine 
+* Didnt understand a bunch in this section
+
+Cell Sharing
+* Segregating prod and non-prod work would need 20–30% more machines in the median cell to run our workload. That’s because prod jobs usually reserve resources to handle rare workload spikes, but don’t use these resources most of the time. 
+* Pooling resources significantly reduces costs. But perhaps packing unrelated users and job types onto the same machines results in CPU interference, and so we would need more machines to compensate?  To assess this, we looked at how the CPI (cycles per instruction) changed for tasks in different environments running on the same machine type with the same clock speed. Results were not clear cut.
+* But even assuming the least-favorable of our results, sharing is still a win: the CPU slowdown is outweighed by the decrease in machines required over several different partitioning schemes, and the sharing advantages apply to all resources including memory and disk, not just CPU.
+

@@ -49,3 +49,12 @@ Scalability
   * Score Caching:- Caching the score given to a machine for its feasibility. Cached until something on the machine or task changes i.e., a task terminates, a task requirements change
   * Equivalence:- Borg only does feasibility and scoring for one task per equivalence class – a group of tasks with identical requirements.
   * Relaxed randomization:-  It is wasteful to calculate feasibility and scores for all the machines in a large cell, so the scheduler examines machines in a random order until it has found “enough” feasible machines to score, and then selects the best within that set. **Scheduling a cell’s entire workload from scratch typically took a few hundred seconds, but did not finish after more than 3 days when this techniques were disabled**
+
+
+Availability
+* Applications that run on Borg are expected to handle failures. Even so, we try to mitigate the impact of these events
+  * automatically reschedules evicted tasks
+  * spread tasks of a job across failure domains
+  * YOu can read the rest in the paper
+* A key design feature in Borg is that already-running tasks continue to run even if the Borgmaster or a task’s Borglet goes down
+* Borgmaster uses a combination of techniques that enable it to achieve 99.99% availability in practice: replication for machine failures; admission control to avoid overload; and deploying instances using simple, low-level tools to minimize external dependencies. Each cell is independent of the others to minimize the chance of correlated operator errors and failure propagation. These goals, not scalability limitations, are the primary argument against larger cells.

@@ -92,3 +92,4 @@ Security Isolation
 * VMs and security sandboxing techniques are used to run external software
 
 Performance Isolation
+* all Borg tasks run inside a Linux cgroup-based resource container [17, 58, 62] and the Borglet manipulates the container settings, giving much improved control because the OS kernel is in the loop.

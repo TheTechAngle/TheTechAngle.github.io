@@ -72,3 +72,13 @@ Cell Sharing
 * Pooling resources significantly reduces costs. But perhaps packing unrelated users and job types onto the same machines results in CPU interference, and so we would need more machines to compensate?  To assess this, we looked at how the CPI (cycles per instruction) changed for tasks in different environments running on the same machine type with the same clock speed. Results were not clear cut.
 * But even assuming the least-favorable of our results, sharing is still a win: the CPU slowdown is outweighed by the decrease in machines required over several different partitioning schemes, and the sharing advantages apply to all resources including memory and disk, not just CPU.
 
+Large cells
+* Using smaller cells would require significantly more machines.
+
+Fine grained resource requests
+???
+
+Resource Reclamation
+* Rather than waste allocated resources that are not currently being consumed, we estimate how many resources a task will use and reclaim the rest for work that can tolerate lower-quality resources, such as batch jobs. This whole process is called resource reclamation.
+* The estimate is called the task’s reservation, and is computed by the Borgmaster every few seconds, using fine-grained usage (resourceconsumption) information captured by the Borglet
+* More aggressive resource estimation can reclaim more resources, with little effect on out-of-memory events (OOMs)Opted for a medium aggressive algo.

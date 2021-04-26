@@ -82,3 +82,13 @@ Resource Reclamation
 * Rather than waste allocated resources that are not currently being consumed, we estimate how many resources a task will use and reclaim the rest for work that can tolerate lower-quality resources, such as batch jobs. This whole process is called resource reclamation.
 * The estimate is called the task’s reservation, and is computed by the Borgmaster every few seconds, using fine-grained usage (resourceconsumption) information captured by the Borglet
 * More aggressive resource estimation can reclaim more resources, with little effect on out-of-memory events (OOMs)Opted for a medium aggressive algo.
+
+
+## Isolation
+
+Security Isolation
+* We use a Linux chroot jail as the primary security isolation mechanism between multiple tasks on the same machine
+*  the borgssh command, which collaborates with the Borglet to construct an ssh connection to a shell that runs in the same chroot and cgroup as the task, locking down access even more tightly.
+* VMs and security sandboxing techniques are used to run external software
+
+Performance Isolation

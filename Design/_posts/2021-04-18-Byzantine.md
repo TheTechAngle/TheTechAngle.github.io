@@ -48,3 +48,6 @@ You will get one Attack message and one Retreat message, no matter which of the 
 With Four generals though, you will have three messages, one from each general. We dont care what the traitor sends (or does), because all the other generals will send the same thing, and in your message store of three messages, you will have two messages from two non traitors that will win majority, EVEN if the one to initiate the messages is the tritor and he sends different messages to all. 
 
 
+Solution
+TLDR: All generals send their decisions to everyone, and the majority decision is chosen. Assuming the number of traitors are lesser than or equal m, where hthere are 3m+1 generals, all will be okay!
+

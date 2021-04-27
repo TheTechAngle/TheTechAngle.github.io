@@ -6,8 +6,35 @@ title: Byzantine Fault Tolerance
 
 When a node in a distributed system crashes, it stops completely. But there are other ways a node could be 'faulty'. Maybe a virus caused it to function differently or hackers programmed it to work differently. Any kind of issue with your node that causes it to function differently than expected is called a Byzantine fault.
 
-We can check for some changes in performances using SLIs or Service Level Indicators. These indicators could be some measure of performance etc. These SLIs have SLOs or service level objectives that state the target of your SLIs. These are then included in thr SLA or service level agreements between you and your customers.
+* We can check for some changes in performances using SLIs or Service Level Indicators. These indicators could be some measure of performance, or uptime, or response time etc. 
+* These SLIs have SLOs or service level objectives that state the target of your SLIs. For example, we want 99% of time, the response is under 500 millisecons
+* These are then included in thr SLA or service level agreements between you and your customers. So this is the SLO plus consequences of what you will do if you dont meet SLO.
 
+“I promise 99% uptime”
+* How often do you check if your system is up? Sampling frequency
+* What does it mean to be “up”? Domain of responsibility
+* Over what time interval do you promise 99% uptime? Measurement interval
+
+
+| Uptime | Downtime/month |
+
+| 90% | 3 days |
+
+| 99% | 7 hours |
+
+| 99.9% | 43 minutes |
+
+| 99.99% | 4 minutes |
+
+| 99.999% | 25 seconds (5m/year)|
+
+Need to have all the following 
+* Multiple VMs
+* Over multiple failure domains
+* Automatic failover
+* Monitoring
+* Tolerance of planned outages
+* Automatic machine provisioning (GCE)
 
 #### The Two Generals problem
 

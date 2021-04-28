@@ -3,6 +3,7 @@ layout: post
 title: Byzantine Fault Tolerance
 ---
 
+[Ref: https://www.distributedsystemscourse.com/](https://www.distributedsystemscourse.com/)
 
 When a node in a distributed system crashes, it stops completely. But there are other ways a node could be 'faulty'. Maybe a virus caused it to function differently or hackers programmed it to work differently. Any kind of issue with your node that causes it to function differently than expected is called a Byzantine fault.
 
